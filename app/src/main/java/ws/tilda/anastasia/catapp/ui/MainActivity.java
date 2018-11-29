@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import ws.tilda.anastasia.catapp.R;
 
@@ -20,10 +19,10 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_all:
-                //do smth
+                    //do smth
                     return true;
                 case R.id.navigation_favorite:
-                //do smth
+                    //do smth
                     return true;
             }
             return false;
