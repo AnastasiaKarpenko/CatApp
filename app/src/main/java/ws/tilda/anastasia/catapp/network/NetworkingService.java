@@ -10,7 +10,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ws.tilda.anastasia.catapp.BuildConfig;
 
-public class Service {
+public class NetworkingService {
 //    public static String apiBaseUrl = "http://biotope.serval.uni.lu:8383/";
 //
 //    private static Retrofit.Builder builder =
