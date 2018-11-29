@@ -9,6 +9,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "API_URL", '"https://api.thecatapi.com/v1/"'
+        buildConfigField "String", "API_KEY", '"8175f91c-3fcc-44ee-83f9-a4d66ff8b331"'
     }
     buildTypes {
         release {
