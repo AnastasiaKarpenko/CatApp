@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     final Fragment mFragment1 = new AllCatsFragment();
     final Fragment mFragment2 = new FavoriteCatsFragment();
     final FragmentManager mFragmentManager = getSupportFragmentManager();
+    Fragment mActiveFragment = mFragment1;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -25,10 +26,12 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_all:
-                    //do smth
+                    mFragmentManager.beginTransaction().hide(mActiveFragment).show(mFragment1).commit();
+                    mActiveFragment = mFragment1;
                     return true;
                 case R.id.navigation_favorite:
-                    //do smth
+                    mFragmentManager.beginTransaction().hide(mActiveFragment).show(mFragment2).commit();
+                    mActiveFragment = mFragment2;
                     return true;
             }
             return false;
