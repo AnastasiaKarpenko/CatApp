@@ -16,6 +16,8 @@ import ws.tilda.anastasia.catapp.R;
 public class AllCatsFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private final int SPAN_COUNT = 2;
+    private AllCatsAdapter mAllCatsAdapter;
+
 
     public AllCatsFragment() {
         // Required empty public constructor
@@ -52,12 +54,16 @@ public class AllCatsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mAllCatsAdapter = new AllCatsAdapter();
+
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
+        mRecyclerView.setAdapter(mAllCatsAdapter);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
     }
+
 
 }

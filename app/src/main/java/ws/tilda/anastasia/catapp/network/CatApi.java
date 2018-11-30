@@ -13,15 +13,13 @@ public interface CatApi {
             "Content-Type: application/json",
             "x-api-key: " + BuildConfig.API_KEY
     })
-    @GET("/images/search")
+    @GET("/v1/images/search")
     CatResponse getAllCats(@Query("size") String size,
-                           @Query("mime_types") String mimeTypes,
-                           @Query("format") String format,
                            @Query("order") String order,
                            @Query("page") int page,
                            @Query("limit") int limit);
 
-    @GET("/images/:{image_id}")
+    @GET("/v1/images/:{image_id}")
     Cat getSpecificCat(
             @Path("image_id") String imageId,
             @Query("size") String size,

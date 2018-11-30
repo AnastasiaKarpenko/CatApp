@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
@@ -13,8 +14,8 @@ import ws.tilda.anastasia.catapp.ui.all.AllCatsFragment;
 import ws.tilda.anastasia.catapp.ui.favorite.FavoriteCatsFragment;
 
 public class MainActivity extends AppCompatActivity {
-    final Fragment mFragment1 = new AllCatsFragment();
-    final Fragment mFragment2 = new FavoriteCatsFragment();
+    final Fragment mFragment1 = AllCatsFragment.newInstance();
+    final Fragment mFragment2 = FavoriteCatsFragment.newInstance();
     final FragmentManager mFragmentManager = getSupportFragmentManager();
     Fragment mActiveFragment = mFragment1;
 
@@ -47,10 +48,15 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        mFragmentManager.beginTransaction().add(R.id.main_container, mFragment2, "2").hide(mFragment2).commit();
-        mFragmentManager.beginTransaction().add(R.id.main_container, mFragment1, "1").commit();
+//        mFragmentManager.beginTransaction().add(R.id.main_container, mFragment2, "2").hide(mFragment2).commit();
+//        mFragmentManager.beginTransaction().add(R.id.main_container, mFragment1, "1").commit();
 
+        switchToFragment(mFragment1);
+    }
 
+    private void switchToFragment(Fragment fragment) {
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        transaction.replace(R.id.main_container, fragment).commit();
     }
 
 }

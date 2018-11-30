@@ -2,7 +2,4 @@
     <string name="app_name">CatApp</string>
     <string name="title_all">All</string>
     <string name="title_favorite">Favorite</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

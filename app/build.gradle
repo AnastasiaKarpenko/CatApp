@@ -10,7 +10,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String", "API_URL", '"https://api.thecatapi.com/v1/"'
+        buildConfigField "String", "API_URL", '"https://api.thecatapi.com"'
         buildConfigField "String", "API_KEY", '"8175f91c-3fcc-44ee-83f9-a4d66ff8b331"'
     }
     buildTypes {
@@ -35,6 +35,7 @@ dependencies {
     //Networking
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+
 }
