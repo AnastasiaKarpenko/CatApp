@@ -23,21 +23,18 @@ import ws.tilda.anastasia.catapp.network.NetworkingService;
 
 public class AllCatsFragment extends Fragment {
     private RecyclerView mRecyclerView;
-    private final int SPAN_COUNT = 2;
     private AllCatsAdapter mAllCatsAdapter;
-
 
     public AllCatsFragment() {
         // Required empty public constructor
     }
 
     public static AllCatsFragment newInstance() {
-        AllCatsFragment fragment = new AllCatsFragment();
-        return fragment;
+        return new AllCatsFragment();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_all_cats, container, false);
     }
@@ -52,28 +49,27 @@ public class AllCatsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mAllCatsAdapter = new AllCatsAdapter();
+        int SPAN_COUNT = 2;
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
         mRecyclerView.setAdapter(mAllCatsAdapter);
 
         getAllCats();
-
     }
 
     private void getAllCats() {
         Call<List<Cat>> call = NetworkingService.getApiService().getAllCats("small", "DESC", 0, 10);
         call.enqueue(new Callback<List<Cat>>() {
             @Override
-            public void onResponse(Call<List<Cat>> call, Response<List<Cat>> response) {
+            public void onResponse(@NonNull Call<List<Cat>> call, @NonNull Response<List<Cat>> response) {
                 List<Cat> getCatResponse = response.body();
                 mAllCatsAdapter.addData(getCatResponse);
             }
 
             @Override
-            public void onFailure(Call<List<Cat>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Cat>> call, Throwable t) {
                 Toast.makeText(getContext(), "Error received", Toast.LENGTH_SHORT).show();
                 Log.d("RETROFIT ERROR", "Error received:" + t.getMessage());
             }
         });
     }
-
 }

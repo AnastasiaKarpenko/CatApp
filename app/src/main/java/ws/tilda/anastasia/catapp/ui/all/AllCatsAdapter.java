@@ -41,7 +41,7 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
         Cat cat = mCats.get(i);
         String url = cat.getUrl();
 
-        //Tried to implement the logic of loading the images, but it does not work. Need to review later
+//        Tried to implement the logic of loading the images, but it does not work. Need to review later
 //        Bitmap photo = getBitmap(url);
 //        allCatsViewHolder.mCatPhoto.setImageBitmap(photo);
 
@@ -57,7 +57,7 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
     }
 
 
-    public void addData(List<Cat> data) {
+    void addData(List<Cat> data) {
         mCats.addAll(data);
         notifyDataSetChanged();
     }
@@ -75,14 +75,12 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
     }
 
 
-    public class AllCatsViewHolder extends RecyclerView.ViewHolder {
+    class AllCatsViewHolder extends RecyclerView.ViewHolder {
         ImageView mCatPhoto;
 
-        public AllCatsViewHolder(@NonNull View itemView) {
+        AllCatsViewHolder(@NonNull View itemView) {
             super(itemView);
-
             mCatPhoto = itemView.findViewById(R.id.cat_photo_iv);
         }
-
     }
 }
