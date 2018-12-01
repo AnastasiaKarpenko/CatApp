@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ws.tilda.anastasia.catapp.R;
-import ws.tilda.anastasia.catapp.model.Cat;
+import ws.tilda.anastasia.catapp.data.model.Cat;
 
 public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsViewHolder> {
 

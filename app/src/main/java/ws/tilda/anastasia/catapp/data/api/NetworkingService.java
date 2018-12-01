@@ -1,4 +1,4 @@
-package ws.tilda.anastasia.catapp.network;
+package ws.tilda.anastasia.catapp.data.api;
 
 import com.google.gson.Gson;
 

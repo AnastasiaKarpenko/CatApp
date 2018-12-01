@@ -1,4 +1,4 @@
-package ws.tilda.anastasia.catapp.network;
+package ws.tilda.anastasia.catapp.data.api;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import ws.tilda.anastasia.catapp.BuildConfig;
-import ws.tilda.anastasia.catapp.model.Cat;
+import ws.tilda.anastasia.catapp.data.model.Cat;
 
 public interface CatApi {
     @Headers({

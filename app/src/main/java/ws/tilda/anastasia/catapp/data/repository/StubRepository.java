@@ -1,9 +1,9 @@
-package ws.tilda.anastasia.catapp.repository;
+package ws.tilda.anastasia.catapp.data.repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ws.tilda.anastasia.catapp.model.Cat;
+import ws.tilda.anastasia.catapp.data.model.Cat;
 
 public class StubRepository {
     private  List<Cat> mCats = new ArrayList<>();

@@ -1,4 +1,4 @@
-package ws.tilda.anastasia.catapp.model;
+package ws.tilda.anastasia.catapp.data.model;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

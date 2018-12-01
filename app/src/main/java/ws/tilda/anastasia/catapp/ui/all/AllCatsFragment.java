@@ -18,8 +18,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ws.tilda.anastasia.catapp.R;
-import ws.tilda.anastasia.catapp.model.Cat;
-import ws.tilda.anastasia.catapp.network.NetworkingService;
+import ws.tilda.anastasia.catapp.data.model.Cat;
+import ws.tilda.anastasia.catapp.data.api.NetworkingService;
 import ws.tilda.anastasia.catapp.ui.RefreshOwner;
 import ws.tilda.anastasia.catapp.ui.Refreshable;
 
