@@ -2,4 +2,6 @@
     <string name="app_name">CatApp</string>
     <string name="title_all">All</string>
     <string name="title_favorite">Favorite</string>
+    <string name="error">Something went wrong. Try again.</string>
+    <string name="error_icon_content_description">Error icon</string>
 </resources>
