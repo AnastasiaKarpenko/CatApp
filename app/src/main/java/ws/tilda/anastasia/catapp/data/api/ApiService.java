@@ -8,7 +8,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ws.tilda.anastasia.catapp.BuildConfig;
 
-public class NetworkingService {
+public class ApiService {
 
     private static OkHttpClient sClient;
     private static Retrofit sRetrofit;

@@ -19,7 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import ws.tilda.anastasia.catapp.R;
 import ws.tilda.anastasia.catapp.data.model.Cat;
-import ws.tilda.anastasia.catapp.data.api.NetworkingService;
+import ws.tilda.anastasia.catapp.data.api.ApiService;
 import ws.tilda.anastasia.catapp.ui.RefreshOwner;
 import ws.tilda.anastasia.catapp.ui.Refreshable;
 
@@ -77,7 +77,7 @@ public class AllCatsFragment extends Fragment implements Refreshable {
     }
 
     private void getAllCats() {
-        Call<List<Cat>> call = NetworkingService.getApiService().getAllCats("small", "DESC", 0, 10);
+        Call<List<Cat>> call = ApiService.getApiService().getAllCats("small", "DESC", 0, 10);
         call.enqueue(new Callback<List<Cat>>() {
             @Override
             public void onResponse(@NonNull Call<List<Cat>> call, @NonNull Response<List<Cat>> response) {
