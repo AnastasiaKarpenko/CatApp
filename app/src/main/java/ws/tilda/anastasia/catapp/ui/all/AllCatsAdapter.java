@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -38,13 +41,27 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
     public void onBindViewHolder(@NonNull AllCatsViewHolder allCatsViewHolder, int i) {
         Cat cat = mCats.get(i);
         String url = cat.getUrl();
-        Bitmap photo = getBitmap(url);
-        allCatsViewHolder.mCatPhoto.setImageBitmap(photo);
+
+        //Tried to implement the logic of loading the images, but it does not work. Need to review later
+//        Bitmap photo = getBitmap(url);
+//        allCatsViewHolder.mCatPhoto.setImageBitmap(photo);
+
+        //Decided to use Glide for now
+        Glide.with(allCatsViewHolder.mCatPhoto.getContext()).load(url)
+                .centerCrop()
+                .into(allCatsViewHolder.mCatPhoto);
+        allCatsViewHolder.mCatId.setText("Id: " + cat.getId());
     }
 
     @Override
     public int getItemCount() {
         return mCats.size();
+    }
+
+
+    public void addData(List<Cat> data) {
+        mCats.addAll(data);
+        notifyDataSetChanged();
     }
 
     private Bitmap getBitmap(String url) {
@@ -59,17 +76,15 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
         }
     }
 
-    public void addData(List<Cat> data) {
-        mCats.addAll(data);
-        notifyDataSetChanged();
-    }
 
     public class AllCatsViewHolder extends RecyclerView.ViewHolder {
-        private ImageView mCatPhoto;
+        ImageView mCatPhoto;
+        TextView mCatId;
 
         public AllCatsViewHolder(@NonNull View itemView) {
             super(itemView);
-            mCatPhoto = itemView.findViewById(R.id.cat_photo_iv);
+            mCatPhoto = itemView.findViewById(R.id.card_cat_image);
+            mCatId = itemView.findViewById(R.id.card_cat_id);
         }
 
     }

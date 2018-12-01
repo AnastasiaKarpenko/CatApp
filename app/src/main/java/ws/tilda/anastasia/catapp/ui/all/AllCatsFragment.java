@@ -1,6 +1,5 @@
 package ws.tilda.anastasia.catapp.ui.all;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ws.tilda.anastasia.catapp.R;
+import ws.tilda.anastasia.catapp.repository.StubRepository;
 
 public class AllCatsFragment extends Fragment {
     private RecyclerView mRecyclerView;
@@ -29,11 +29,6 @@ public class AllCatsFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_all_cats, container, false);
@@ -42,12 +37,6 @@ public class AllCatsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mRecyclerView = view.findViewById(R.id.all_cats_recyclerview);
-
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
     }
 
     @Override
@@ -58,12 +47,8 @@ public class AllCatsFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
         mRecyclerView.setAdapter(mAllCatsAdapter);
-    }
+        mAllCatsAdapter.addData(new StubRepository().getCats());
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
-
 
 }
