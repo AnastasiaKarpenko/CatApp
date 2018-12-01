@@ -6,12 +6,20 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import ws.tilda.anastasia.catapp.R;
-import ws.tilda.anastasia.catapp.repository.StubRepository;
+import ws.tilda.anastasia.catapp.model.Cat;
+import ws.tilda.anastasia.catapp.network.NetworkingService;
 
 public class AllCatsFragment extends Fragment {
     private RecyclerView mRecyclerView;
@@ -44,11 +52,28 @@ public class AllCatsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mAllCatsAdapter = new AllCatsAdapter();
-
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
         mRecyclerView.setAdapter(mAllCatsAdapter);
-        mAllCatsAdapter.addData(new StubRepository().getCats());
 
+        getAllCats();
+
+    }
+
+    private void getAllCats() {
+        Call<List<Cat>> call = NetworkingService.getApiService().getAllCats("small", "DESC", 0, 10);
+        call.enqueue(new Callback<List<Cat>>() {
+            @Override
+            public void onResponse(Call<List<Cat>> call, Response<List<Cat>> response) {
+                List<Cat> getCatResponse = response.body();
+                mAllCatsAdapter.addData(getCatResponse);
+            }
+
+            @Override
+            public void onFailure(Call<List<Cat>> call, Throwable t) {
+                Toast.makeText(getContext(), "Error received", Toast.LENGTH_SHORT).show();
+                Log.d("RETROFIT ERROR", "Error received" + t.getMessage());
+            }
+        });
     }
 
 }

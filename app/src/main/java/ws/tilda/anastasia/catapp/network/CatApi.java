@@ -1,12 +1,14 @@
 package ws.tilda.anastasia.catapp.network;
 
+import java.util.List;
+
+import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import ws.tilda.anastasia.catapp.BuildConfig;
 import ws.tilda.anastasia.catapp.model.Cat;
-import ws.tilda.anastasia.catapp.model.CatResponse;
 
 public interface CatApi {
     @Headers({
@@ -14,10 +16,10 @@ public interface CatApi {
             "x-api-key: " + BuildConfig.API_KEY
     })
     @GET("/v1/images/search")
-    CatResponse getAllCats(@Query("size") String size,
-                           @Query("order") String order,
-                           @Query("page") int page,
-                           @Query("limit") int limit);
+    Call<List<Cat>> getAllCats(@Query("size") String size,
+                               @Query("order") String order,
+                               @Query("page") int page,
+                               @Query("limit") int limit);
 
     @GET("/v1/images/:{image_id}")
     Cat getSpecificCat(
