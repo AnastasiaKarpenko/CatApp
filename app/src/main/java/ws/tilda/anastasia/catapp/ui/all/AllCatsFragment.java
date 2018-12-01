@@ -18,8 +18,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ws.tilda.anastasia.catapp.R;
-import ws.tilda.anastasia.catapp.data.model.Cat;
 import ws.tilda.anastasia.catapp.data.api.ApiService;
+import ws.tilda.anastasia.catapp.data.model.Cat;
+import ws.tilda.anastasia.catapp.data.repository.Repository;
 import ws.tilda.anastasia.catapp.ui.RefreshOwner;
 import ws.tilda.anastasia.catapp.ui.Refreshable;
 
@@ -28,6 +29,7 @@ public class AllCatsFragment extends Fragment implements Refreshable {
     private AllCatsAdapter mAllCatsAdapter;
     private RefreshOwner mRefreshOwner;
     private View mErrorView;
+    private Repository mRepository;
 
     public AllCatsFragment() {
         // Required empty public constructor
@@ -40,6 +42,10 @@ public class AllCatsFragment extends Fragment implements Refreshable {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        if (context instanceof Repository.RepositoryOwner) {
+            mRepository = ((Repository.RepositoryOwner) context).obtainRepository();
+        }
 
         if (context instanceof RefreshOwner) {
             mRefreshOwner = ((RefreshOwner) context);
@@ -72,6 +78,13 @@ public class AllCatsFragment extends Fragment implements Refreshable {
     }
 
     @Override
+    public void onDetach() {
+        mRepository = null;
+        mRefreshOwner = null;
+        super.onDetach();
+    }
+
+    @Override
     public void onRefreshData() {
         getAllCats();
     }
@@ -81,10 +94,11 @@ public class AllCatsFragment extends Fragment implements Refreshable {
         call.enqueue(new Callback<List<Cat>>() {
             @Override
             public void onResponse(@NonNull Call<List<Cat>> call, @NonNull Response<List<Cat>> response) {
-                List<Cat> getCatResponse = response.body();
+                List<Cat> catsResponse = response.body();
                 mErrorView.setVisibility(View.GONE);
                 mRecyclerView.setVisibility(View.VISIBLE);
-                mAllCatsAdapter.addData(getCatResponse, true);
+                mRepository.insertCats(catsResponse);
+                mAllCatsAdapter.addData(catsResponse, true);
                 mRefreshOwner.setRefreshState(false);
             }
 
