@@ -1,6 +1,7 @@
-package ws.tilda.anastasia.catapp.ui.all;
+package ws.tilda.anastasia.catapp.ui.allcats;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,7 +25,7 @@ import ws.tilda.anastasia.catapp.data.repository.Repository;
 import ws.tilda.anastasia.catapp.ui.RefreshOwner;
 import ws.tilda.anastasia.catapp.ui.Refreshable;
 
-public class AllCatsFragment extends Fragment implements Refreshable {
+public class AllCatsFragment extends Fragment implements Refreshable, AllCatsAdapter.OnItemClickListener {
     private RecyclerView mRecyclerView;
     private AllCatsAdapter mAllCatsAdapter;
     private RefreshOwner mRefreshOwner;
@@ -110,5 +111,10 @@ public class AllCatsFragment extends Fragment implements Refreshable {
                 Log.d("RETROFIT ERROR", "Error received:" + t.getMessage());
             }
         });
+    }
+
+    @Override
+    public void onItemClick(String catId) {
+
     }
 }

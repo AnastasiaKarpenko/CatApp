@@ -1,4 +1,4 @@
-package ws.tilda.anastasia.catapp.ui.all;
+package ws.tilda.anastasia.catapp.ui.allcats;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -76,6 +76,11 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public interface OnItemClickListener {
+
+        void onItemClick(String catId);
     }
 
 

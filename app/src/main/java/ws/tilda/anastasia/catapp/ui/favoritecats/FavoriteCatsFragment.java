@@ -1,4 +1,4 @@
-package ws.tilda.anastasia.catapp.ui.favorite;
+package ws.tilda.anastasia.catapp.ui.favoritecats;
 
 import android.content.Context;
 import android.os.Bundle;

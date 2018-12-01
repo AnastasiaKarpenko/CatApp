@@ -11,10 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import ws.tilda.anastasia.catapp.MyApplication;
 import ws.tilda.anastasia.catapp.R;
 import ws.tilda.anastasia.catapp.data.repository.Repository;
-import ws.tilda.anastasia.catapp.ui.all.AllCatsFragment;
-import ws.tilda.anastasia.catapp.ui.favorite.FavoriteCatsFragment;
+import ws.tilda.anastasia.catapp.ui.allcats.AllCatsFragment;
+import ws.tilda.anastasia.catapp.ui.favoritecats.FavoriteCatsFragment;
 
-public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,
+public class CatsGridActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,
         RefreshOwner, Repository.RepositoryOwner {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
