@@ -1,14 +1,12 @@
 package ws.tilda.anastasia.catapp.ui;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 
 import ws.tilda.anastasia.catapp.R;
 import ws.tilda.anastasia.catapp.ui.all.AllCatsFragment;
@@ -25,22 +23,18 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_all:
-                    mFragmentManager.beginTransaction().hide(mActiveFragment).show(mFragment1).commit();
-                    mActiveFragment = mFragment1;
-                    return true;
-                case R.id.navigation_favorite:
-                    mFragmentManager.beginTransaction().hide(mActiveFragment).show(mFragment2).commit();
-                    mActiveFragment = mFragment2;
-                    return true;
-            }
-            return false;
+            = item -> {
+        switch (item.getItemId()) {
+            case R.id.navigation_all:
+                mFragmentManager.beginTransaction().hide(mActiveFragment).show(mFragment1).commit();
+                mActiveFragment = mFragment1;
+                return true;
+            case R.id.navigation_favorite:
+                mFragmentManager.beginTransaction().hide(mActiveFragment).show(mFragment2).commit();
+                mActiveFragment = mFragment2;
+                return true;
         }
+        return false;
     };
 
     @Override
@@ -67,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     @Override
     public void onRefresh() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.main_container);
         if (fragment instanceof Refreshable) {
             ((Refreshable) fragment).onRefreshData();
         } else {
