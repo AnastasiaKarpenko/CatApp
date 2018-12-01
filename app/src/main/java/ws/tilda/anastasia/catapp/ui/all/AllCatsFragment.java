@@ -1,5 +1,6 @@
 package ws.tilda.anastasia.catapp.ui.all;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,10 +21,13 @@ import retrofit2.Response;
 import ws.tilda.anastasia.catapp.R;
 import ws.tilda.anastasia.catapp.model.Cat;
 import ws.tilda.anastasia.catapp.network.NetworkingService;
+import ws.tilda.anastasia.catapp.ui.RefreshOwner;
+import ws.tilda.anastasia.catapp.ui.Refreshable;
 
-public class AllCatsFragment extends Fragment {
+public class AllCatsFragment extends Fragment implements Refreshable {
     private RecyclerView mRecyclerView;
     private AllCatsAdapter mAllCatsAdapter;
+    private RefreshOwner mRefreshOwner;
 
     public AllCatsFragment() {
         // Required empty public constructor
@@ -31,6 +35,15 @@ public class AllCatsFragment extends Fragment {
 
     public static AllCatsFragment newInstance() {
         return new AllCatsFragment();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof RefreshOwner) {
+            mRefreshOwner = ((RefreshOwner) context);
+        }
     }
 
     @Override
@@ -53,6 +66,11 @@ public class AllCatsFragment extends Fragment {
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
         mRecyclerView.setAdapter(mAllCatsAdapter);
 
+        onRefreshData();
+    }
+
+    @Override
+    public void onRefreshData() {
         getAllCats();
     }
 
@@ -63,6 +81,7 @@ public class AllCatsFragment extends Fragment {
             public void onResponse(@NonNull Call<List<Cat>> call, @NonNull Response<List<Cat>> response) {
                 List<Cat> getCatResponse = response.body();
                 mAllCatsAdapter.addData(getCatResponse);
+                mRefreshOwner.setRefreshState(false);
             }
 
             @Override
