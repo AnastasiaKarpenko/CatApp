@@ -3,6 +3,7 @@ package ws.tilda.anastasia.catapp.data.model;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -36,7 +37,7 @@ public class Cat {
         return breeds;
     }
 
-    public void setBreeds(List<Object> breeds) {
+    public void setBreeds(@NonNull List<Object> breeds) {
         this.breeds = breeds;
     }
 
@@ -44,7 +45,7 @@ public class Cat {
         return categories;
     }
 
-    public void setCategories(List<Object> categories) {
+    public void setCategories(@NonNull List<Object> categories) {
         this.categories = categories;
     }
 
@@ -52,7 +53,7 @@ public class Cat {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 
@@ -60,7 +61,7 @@ public class Cat {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(@NonNull String url) {
         this.url = url;
     }
 
