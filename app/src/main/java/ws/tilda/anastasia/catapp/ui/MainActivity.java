@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         setContentView(R.layout.activity_main);
 
         mSwipeRefreshLayout = findViewById(R.id.refresher);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -66,11 +67,16 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     @Override
     public void onRefresh() {
-
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
+        if (fragment instanceof Refreshable) {
+            ((Refreshable) fragment).onRefreshData();
+        } else {
+            setRefreshState(false);
+        }
     }
 
     @Override
-    public void SetRefreshState(boolean refreshing) {
-
+    public void setRefreshState(boolean refreshing) {
+        mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(refreshing));
     }
 }
