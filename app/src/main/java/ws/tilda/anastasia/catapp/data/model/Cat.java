@@ -1,23 +1,36 @@
 package ws.tilda.anastasia.catapp.data.model;
 
-import java.util.List;
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Cat {
+import java.util.List;
 
-    @SerializedName("breeds")
-    @Expose
-    private List<Object> breeds = null;
-    @SerializedName("categories")
-    @Expose
-    private List<Object> categories = null;
+@Entity
+public class Cat {
+    @PrimaryKey
+    @ColumnInfo(name = "id")
     @SerializedName("id")
     @Expose
     private String id;
+
+    @ColumnInfo(name = "url")
     @SerializedName("url")
     @Expose
     private String url;
+
+    @ColumnInfo(name = "breeds")
+    @SerializedName("breeds")
+    @Expose
+    private List<Object> breeds = null;
+
+    @ColumnInfo(name = "categories")
+    @SerializedName("categories")
+    @Expose
+    private List<Object> categories = null;
 
     public List<Object> getBreeds() {
         return breeds;
