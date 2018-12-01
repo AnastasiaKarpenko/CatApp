@@ -14,7 +14,9 @@ import ws.tilda.anastasia.catapp.R;
 import ws.tilda.anastasia.catapp.ui.all.AllCatsFragment;
 import ws.tilda.anastasia.catapp.ui.favorite.FavoriteCatsFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,
+        RefreshOwner {
+
     private SwipeRefreshLayout mSwipeRefreshLayout;
     final Fragment mFragment1 = AllCatsFragment.newInstance();
     final Fragment mFragment2 = FavoriteCatsFragment.newInstance();
@@ -62,4 +64,13 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.main_container, fragment).commit();
     }
 
+    @Override
+    public void onRefresh() {
+
+    }
+
+    @Override
+    public void SetRefreshState(boolean refreshing) {
+
+    }
 }
