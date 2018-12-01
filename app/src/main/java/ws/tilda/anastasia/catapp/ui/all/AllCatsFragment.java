@@ -71,7 +71,7 @@ public class AllCatsFragment extends Fragment {
             @Override
             public void onFailure(Call<List<Cat>> call, Throwable t) {
                 Toast.makeText(getContext(), "Error received", Toast.LENGTH_SHORT).show();
-                Log.d("RETROFIT ERROR", "Error received" + t.getMessage());
+                Log.d("RETROFIT ERROR", "Error received:" + t.getMessage());
             }
         });
     }
