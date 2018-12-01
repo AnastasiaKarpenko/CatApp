@@ -11,4 +11,8 @@
         android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
 
+    <include
+        layout="@layout/v_error"
+        android:visibility="gone"/>
+
 </FrameLayout>

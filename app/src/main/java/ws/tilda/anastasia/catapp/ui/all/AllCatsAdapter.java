@@ -57,7 +57,11 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
     }
 
 
-    void addData(List<Cat> data) {
+    void addData(List<Cat> data, boolean isRefreshed) {
+        if (isRefreshed) {
+            mCats.clear();
+        }
+
         mCats.addAll(data);
         notifyDataSetChanged();
     }

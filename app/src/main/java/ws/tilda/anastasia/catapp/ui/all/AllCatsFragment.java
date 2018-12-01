@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -28,6 +27,7 @@ public class AllCatsFragment extends Fragment implements Refreshable {
     private RecyclerView mRecyclerView;
     private AllCatsAdapter mAllCatsAdapter;
     private RefreshOwner mRefreshOwner;
+    private View mErrorView;
 
     public AllCatsFragment() {
         // Required empty public constructor
@@ -55,6 +55,8 @@ public class AllCatsFragment extends Fragment implements Refreshable {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mRecyclerView = view.findViewById(R.id.all_cats_recyclerview);
+        mErrorView = view.findViewById(R.id.errorView);
+        mErrorView.setVisibility(View.GONE);
     }
 
     @Override
@@ -80,13 +82,16 @@ public class AllCatsFragment extends Fragment implements Refreshable {
             @Override
             public void onResponse(@NonNull Call<List<Cat>> call, @NonNull Response<List<Cat>> response) {
                 List<Cat> getCatResponse = response.body();
-                mAllCatsAdapter.addData(getCatResponse);
+                mErrorView.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mAllCatsAdapter.addData(getCatResponse, true);
                 mRefreshOwner.setRefreshState(false);
             }
 
             @Override
             public void onFailure(@NonNull Call<List<Cat>> call, Throwable t) {
-                Toast.makeText(getContext(), "Error received", Toast.LENGTH_SHORT).show();
+                mErrorView.setVisibility(View.VISIBLE);
+                mRecyclerView.setVisibility(View.GONE);
                 Log.d("RETROFIT ERROR", "Error received:" + t.getMessage());
             }
         });
