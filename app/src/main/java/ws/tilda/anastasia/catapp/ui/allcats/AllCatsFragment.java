@@ -24,6 +24,8 @@ import ws.tilda.anastasia.catapp.data.model.Cat;
 import ws.tilda.anastasia.catapp.data.repository.Repository;
 import ws.tilda.anastasia.catapp.ui.RefreshOwner;
 import ws.tilda.anastasia.catapp.ui.Refreshable;
+import ws.tilda.anastasia.catapp.ui.cat.CatActivity;
+import ws.tilda.anastasia.catapp.ui.cat.CatFragment;
 
 public class AllCatsFragment extends Fragment implements Refreshable, AllCatsAdapter.OnItemClickListener {
     private RecyclerView mRecyclerView;
@@ -115,6 +117,10 @@ public class AllCatsFragment extends Fragment implements Refreshable, AllCatsAda
 
     @Override
     public void onItemClick(String catId) {
-
+        Intent intent = new Intent(getActivity(), CatActivity.class);
+        Bundle args = new Bundle();
+        args.putString(CatFragment.CAT_ID_KEY, catId);
+        intent.putExtra(CatActivity.CAT_ID_KEY, args);
+        startActivity(intent);
     }
 }

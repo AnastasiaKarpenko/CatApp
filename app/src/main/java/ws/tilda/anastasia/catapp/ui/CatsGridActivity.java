@@ -42,7 +42,7 @@ public class CatsGridActivity extends AppCompatActivity implements SwipeRefreshL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_cats_grid);
 
         mSwipeRefreshLayout = findViewById(R.id.refresher);
         mSwipeRefreshLayout.setOnRefreshListener(this);
