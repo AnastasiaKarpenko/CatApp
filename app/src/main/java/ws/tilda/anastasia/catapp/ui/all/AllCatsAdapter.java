@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -50,7 +49,6 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
         Glide.with(allCatsViewHolder.mCatPhoto.getContext()).load(url)
                 .centerCrop()
                 .into(allCatsViewHolder.mCatPhoto);
-        allCatsViewHolder.mCatId.setText("Id: " + cat.getId());
     }
 
     @Override
@@ -79,12 +77,11 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
 
     public class AllCatsViewHolder extends RecyclerView.ViewHolder {
         ImageView mCatPhoto;
-        TextView mCatId;
 
         public AllCatsViewHolder(@NonNull View itemView) {
             super(itemView);
-            mCatPhoto = itemView.findViewById(R.id.card_cat_image);
-            mCatId = itemView.findViewById(R.id.card_cat_id);
+
+            mCatPhoto = itemView.findViewById(R.id.cat_photo_iv);
         }
 
     }
