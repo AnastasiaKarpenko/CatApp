@@ -8,12 +8,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 
+import ws.tilda.anastasia.catapp.MyApplication;
 import ws.tilda.anastasia.catapp.R;
+import ws.tilda.anastasia.catapp.data.repository.Repository;
 import ws.tilda.anastasia.catapp.ui.all.AllCatsFragment;
 import ws.tilda.anastasia.catapp.ui.favorite.FavoriteCatsFragment;
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,
-        RefreshOwner {
+        RefreshOwner, Repository.RepositoryOwner {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     final Fragment mFragment1 = AllCatsFragment.newInstance();
@@ -72,5 +74,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     @Override
     public void setRefreshState(boolean refreshing) {
         mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(refreshing));
+    }
+
+    @Override
+    public Repository obtainRepository() {
+        return ((MyApplication) getApplicationContext()).getRepository();
     }
 }
