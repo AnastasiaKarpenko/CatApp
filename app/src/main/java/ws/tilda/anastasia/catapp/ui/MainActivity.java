@@ -6,6 +6,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
@@ -14,6 +15,7 @@ import ws.tilda.anastasia.catapp.ui.all.AllCatsFragment;
 import ws.tilda.anastasia.catapp.ui.favorite.FavoriteCatsFragment;
 
 public class MainActivity extends AppCompatActivity {
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     final Fragment mFragment1 = AllCatsFragment.newInstance();
     final Fragment mFragment2 = FavoriteCatsFragment.newInstance();
     final FragmentManager mFragmentManager = getSupportFragmentManager();
@@ -43,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mSwipeRefreshLayout = findViewById(R.id.refresher);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
