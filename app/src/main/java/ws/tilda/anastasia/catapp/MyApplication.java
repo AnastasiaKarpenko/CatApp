@@ -16,6 +16,7 @@ public class MyApplication extends Application {
 
         final CatDatabase database = Room.databaseBuilder(this, CatDatabase.class, "cat_database")
                 .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
                 .build();
 
         mRepository = new Repository(database.getCatDao());

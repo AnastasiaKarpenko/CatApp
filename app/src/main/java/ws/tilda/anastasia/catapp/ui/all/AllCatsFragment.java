@@ -106,6 +106,7 @@ public class AllCatsFragment extends Fragment implements Refreshable {
             public void onFailure(@NonNull Call<List<Cat>> call, Throwable t) {
                 mErrorView.setVisibility(View.VISIBLE);
                 mRecyclerView.setVisibility(View.GONE);
+                mRefreshOwner.setRefreshState(false);
                 Log.d("RETROFIT ERROR", "Error received:" + t.getMessage());
             }
         });

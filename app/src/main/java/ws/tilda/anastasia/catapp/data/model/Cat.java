@@ -2,6 +2,7 @@ package ws.tilda.anastasia.catapp.data.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @Entity
 public class Cat {
     @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "id")
     @SerializedName("id")
     @Expose
@@ -23,12 +25,12 @@ public class Cat {
     @Expose
     private String url;
 
-    @ColumnInfo(name = "breeds")
+    @Ignore
     @SerializedName("breeds")
     @Expose
     private List<Object> breeds = null;
 
-    @ColumnInfo(name = "categories")
+    @Ignore
     @SerializedName("categories")
     @Expose
     private List<Object> categories = null;
