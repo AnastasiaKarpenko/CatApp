@@ -8,19 +8,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import ws.tilda.anastasia.catapp.R;
 import ws.tilda.anastasia.catapp.data.api.ApiService;
-import ws.tilda.anastasia.catapp.data.model.FavoriteCat;
 import ws.tilda.anastasia.catapp.ui.RefreshOwner;
 import ws.tilda.anastasia.catapp.ui.Refreshable;
 import ws.tilda.anastasia.catapp.ui.cat.CatActivity;
@@ -32,6 +28,7 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, Favor
     private RefreshOwner mRefreshOwner;
     private View mErrorView;
     private View mEmptyView;
+    private Disposable mDisposable;
 
     public FavoriteCatsFragment() {
         // Required empty public constructor
@@ -86,6 +83,9 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, Favor
     @Override
     public void onDetach() {
         mRefreshOwner = null;
+        if (mDisposable != null) {
+            mDisposable.dispose();
+        }
         super.onDetach();
     }
 
@@ -95,32 +95,27 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, Favor
     }
 
     private void getFavoriteCats() {
-        Call<List<FavoriteCat>> call = ApiService.getApiService().getFavoriteCats();
-        call.enqueue(new Callback<List<FavoriteCat>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<FavoriteCat>> call, @NonNull Response<List<FavoriteCat>> response) {
-                List<FavoriteCat> catsResponse = response.body();
+        mDisposable = ApiService.getApiService().getFavoriteCats()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> mRefreshOwner.setRefreshState(true))
+                .doFinally(() -> mRefreshOwner.setRefreshState(false))
+                .subscribe(
+                        response -> {
+                            mErrorView.setVisibility(View.GONE);
+                            mEmptyView.setVisibility(View.GONE);
+                            mRecyclerView.setVisibility(View.VISIBLE);
+                            if (response != null && !response.isEmpty()) {
+                                mFavoriteCatsAdapter.addData(response, true);
+                            } else {
+                                mEmptyView.setVisibility(View.VISIBLE);
+                            }
+                        },
+                        throwable -> {
+                            mErrorView.setVisibility(View.VISIBLE);
+                            mRecyclerView.setVisibility(View.GONE);
+                        });
 
-                if (catsResponse != null && !catsResponse.isEmpty()) {
-                    mFavoriteCatsAdapter.addData(catsResponse, true);
-                    mRefreshOwner.setRefreshState(false);
-                    mErrorView.setVisibility(View.GONE);
-                    mEmptyView.setVisibility(View.GONE);
-                    mRecyclerView.setVisibility(View.VISIBLE);
-                } else {
-                    mEmptyView.setVisibility(View.VISIBLE);
-                }
-                mRefreshOwner.setRefreshState(false);
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<FavoriteCat>> call, Throwable t) {
-                mErrorView.setVisibility(View.VISIBLE);
-                mRecyclerView.setVisibility(View.GONE);
-                mRefreshOwner.setRefreshState(false);
-                Log.d("RETROFIT ERROR", "Error received:" + t.getMessage());
-            }
-        });
     }
 
     @Override

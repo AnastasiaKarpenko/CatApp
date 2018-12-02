@@ -30,7 +30,7 @@ public interface CatApi {
 
     @Headers({"Content-Type: application/json", "x-api-key: " + BuildConfig.API_KEY})
     @GET("/v1/favourites")
-    Call<List<FavoriteCat>> getFavoriteCats();
+    Single<List<FavoriteCat>> getFavoriteCats();
 
 //    @POST("/v1/favourites")
 //    void setAsFavorite(@Body String catId);
