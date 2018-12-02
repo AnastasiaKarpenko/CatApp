@@ -77,7 +77,7 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
 
 //        Tried to implement the logic of loading the images, but it does not work. Need to review later
 //        Bitmap photo = getBitmap(url);
-//        allCatsViewHolder.mCatPhoto.setImageBitmap(photo);
+//        mCatPhoto.setImageBitmap(photo);
 
 
             //Decided to use Glide for now
@@ -86,18 +86,18 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
                     .into(mCatPhoto);
 
             if (listener != null) {
-                itemView.setOnClickListener(v -> listener.onItemClick(
-                        cat.getId()
-                ));
-            }
+            itemView.setOnClickListener(v -> listener.onItemClick(
+                    cat.getId()
+            ));
         }
+    }
 
         private Bitmap getBitmap(String url) {
             try {
                 InputStream is = (InputStream) new URL(url).getContent();
-                Bitmap d = BitmapFactory.decodeStream(is);
+                Bitmap bitmap = BitmapFactory.decodeStream(is);
                 is.close();
-                return d;
+                return bitmap;
 
             } catch (Exception e) {
                 return null;

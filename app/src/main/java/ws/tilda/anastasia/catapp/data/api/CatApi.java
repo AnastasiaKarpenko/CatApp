@@ -25,5 +25,5 @@ public interface CatApi {
     Call<Cat> getSpecificCat(
             @Path("image_id") String imageId,
             @Query("size") String size,
-            @Query("include_favourite") String includeFavorite);
+            @Query("include_favourite") boolean includeFavorite);
 }
