@@ -71,6 +71,7 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
         void bind(Cat cat, OnItemClickListener listener) {
 
             mCatBinding.setCat(new CatListItemViewModel(cat));
+            mCatBinding.setOnItemClickListener(mOnItemClickListener);
             mCatBinding.executePendingBindings();
 
 //            //Decided to use Glide for now
