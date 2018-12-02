@@ -8,6 +8,7 @@ import android.arch.persistence.room.Query;
 import java.util.List;
 
 import ws.tilda.anastasia.catapp.data.model.Cat;
+import ws.tilda.anastasia.catapp.data.model.FavoriteCat;
 
 @Dao
 public interface CatDao {
@@ -17,5 +18,11 @@ public interface CatDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCats(List<Cat> cats);
+
+    @Query("select * from favoritecat")
+    List<FavoriteCat> getFavoriteCats();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertFavoriteCats(List<FavoriteCat> favoriteCats);
 
 }

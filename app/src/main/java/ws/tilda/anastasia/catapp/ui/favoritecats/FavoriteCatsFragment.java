@@ -31,7 +31,7 @@ public class FavoriteCatsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_favorite_cats, container, false);
+        return inflater.inflate(R.layout.fragment_all_cats, container, false);
     }
 
 
@@ -43,6 +43,5 @@ public class FavoriteCatsFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-
     }
 }
