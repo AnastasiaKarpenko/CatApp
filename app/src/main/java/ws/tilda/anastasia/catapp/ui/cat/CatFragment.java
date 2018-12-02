@@ -40,9 +40,7 @@ public class CatFragment extends Fragment implements Refreshable {
     private CheckBox mFavoriteCb;
 
 
-    public static CatFragment newInstance(Bundle args)
-
-    {
+    public static CatFragment newInstance(Bundle args) {
         CatFragment fragment = new CatFragment();
         fragment.setArguments(args);
 
