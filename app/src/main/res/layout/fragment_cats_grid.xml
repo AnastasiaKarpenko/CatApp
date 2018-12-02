@@ -14,5 +14,8 @@
     <include
         layout="@layout/view_error"
         android:visibility="gone"/>
+    <include
+        layout="@layout/view_empty"
+        android:visibility="gone"/>
 
 </FrameLayout>

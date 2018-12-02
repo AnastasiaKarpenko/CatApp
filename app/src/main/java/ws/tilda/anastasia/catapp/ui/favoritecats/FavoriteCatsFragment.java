@@ -31,6 +31,7 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, Favor
     private FavoriteCatsAdapter mFavoriteCatsAdapter;
     private RefreshOwner mRefreshOwner;
     private View mErrorView;
+    private View mEmptyView;
 
     public FavoriteCatsFragment() {
         // Required empty public constructor
@@ -60,6 +61,9 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, Favor
         mRecyclerView = view.findViewById(R.id.cats_recyclerview);
         mErrorView = view.findViewById(R.id.errorView);
         mErrorView.setVisibility(View.GONE);
+
+        mEmptyView = view.findViewById(R.id.emptyView);
+        mEmptyView.setVisibility(View.GONE);
     }
 
     @Override
@@ -71,7 +75,14 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, Favor
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
         mRecyclerView.setAdapter(mFavoriteCatsAdapter);
 
+        if (mFavoriteCatsAdapter.getItemCount() == 0) {
+            mErrorView.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.GONE);
+            mEmptyView.setVisibility(View.VISIBLE);
+        }
+
         onRefreshData();
+
     }
 
     @Override
@@ -99,8 +110,11 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, Favor
                 List<FavoriteCat> catsResponse = response.body();
                 mErrorView.setVisibility(View.GONE);
                 mRecyclerView.setVisibility(View.VISIBLE);
-                mFavoriteCatsAdapter.addData(catsResponse, true);
-                mRefreshOwner.setRefreshState(false);
+                if (catsResponse != null) {
+                    mFavoriteCatsAdapter.addData(catsResponse, true);
+                    mRefreshOwner.setRefreshState(false);
+                }
+
             }
 
             @Override
