@@ -21,7 +21,7 @@ public interface CatApi {
                                @Query("page") int page,
                                @Query("limit") int limit);
 
-    @GET("/v1/images/:{image_id}")
+    @GET("/v1/images/{image_id}")
     Call<Cat> getSpecificCat(
             @Path("image_id") String imageId,
             @Query("size") String size,
