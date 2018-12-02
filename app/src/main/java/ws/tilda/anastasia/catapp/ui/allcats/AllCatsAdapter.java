@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,12 +59,10 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
 
     class AllCatsViewHolder extends RecyclerView.ViewHolder {
         private CatBinding mCatBinding;
-        ImageView mCatPhoto;
 
         AllCatsViewHolder(@NonNull CatBinding binding) {
             super(binding.getRoot());
             mCatBinding = binding;
-
         }
 
         void bind(Cat cat, OnItemClickListener listener) {
@@ -73,17 +70,6 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
             mCatBinding.setCat(new CatListItemViewModel(cat));
             mCatBinding.setOnItemClickListener(mOnItemClickListener);
             mCatBinding.executePendingBindings();
-
-//            //Decided to use Glide for now
-//            Glide.with(mCatPhoto.getContext()).load(url)
-//                    .centerCrop()
-//                    .into(mCatPhoto);
-//
-//            if (listener != null) {
-//                itemView.setOnClickListener(v -> listener.onItemClick(
-//                        cat.getId()
-//                ));
-//            }
         }
     }
 }

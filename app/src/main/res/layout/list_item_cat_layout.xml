@@ -16,7 +16,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:onClick="@{() -> onItemClickListener.onItemClick(cat.getCatId)}">
+        android:onClick="@{() -> onItemClickListener.onItemClick(cat.catId)}">
 
         <ImageView
             android:id="@+id/cat_photo_iv"
@@ -31,7 +31,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/ic_launcher"/>
+            app:srcCompat="@mipmap/ic_launcher"
+            app:catPhotoUrl="@{cat.catPhotoUrl}"/>
 
     </android.support.constraint.ConstraintLayout>
 </layout>
