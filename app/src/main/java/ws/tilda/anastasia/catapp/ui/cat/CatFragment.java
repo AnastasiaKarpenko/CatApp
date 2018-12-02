@@ -96,10 +96,10 @@ public class CatFragment extends Fragment implements Refreshable {
 
     @Override
     public void onRefreshData() {
-        getSpecificCat();
+        getCat();
     }
 
-    private void getSpecificCat() {
+    private void getCat() {
         Call<Cat> call = ApiService.getApiService().getCat(mId, "full", true);
         call.enqueue(new Callback<Cat>() {
             @Override
