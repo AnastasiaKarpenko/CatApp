@@ -102,7 +102,7 @@ public class CatFragment extends Fragment implements Refreshable {
     }
 
     private void getSpecificCat() {
-        Call<Cat> call = ApiService.getApiService().getSpecificCat(mId, "full", false);
+        Call<Cat> call = ApiService.getApiService().getSpecificCat(mId, "full", true);
         call.enqueue(new Callback<Cat>() {
             @Override
             public void onResponse(@NonNull Call<Cat> call, @NonNull Response<Cat> response) {
@@ -130,12 +130,6 @@ public class CatFragment extends Fragment implements Refreshable {
                 .centerCrop()
                 .into(mCatPhotoIv);
         mCatIdTv.setText("Cat id: " + cat.getId());
-
-//        if(cat instanceof FavoriteCat) {
-//            mFavoriteCb.setChecked(true);
-//        } else {
-//            mFavoriteCb.setChecked(false);
-//        }
 
     }
 
