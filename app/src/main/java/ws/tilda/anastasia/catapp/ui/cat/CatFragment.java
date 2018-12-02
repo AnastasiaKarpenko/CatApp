@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +15,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import ws.tilda.anastasia.catapp.R;
 import ws.tilda.anastasia.catapp.data.api.ApiService;
 import ws.tilda.anastasia.catapp.data.model.Cat;
@@ -28,12 +27,11 @@ import ws.tilda.anastasia.catapp.ui.Refreshable;
 public class CatFragment extends Fragment implements Refreshable {
     public static final String CAT_ID_KEY = "CAT_ID_KEY";
 
-
     private RefreshOwner mRefreshOwner;
     private View mErrorView;
     private View mCatView;
     private String mId;
-
+    private Disposable mDisposable;
 
     private ImageView mCatPhotoIv;
     private TextView mCatIdTv;
@@ -100,27 +98,21 @@ public class CatFragment extends Fragment implements Refreshable {
     }
 
     private void getCat() {
-        Call<Cat> call = ApiService.getApiService().getCat(mId, "full", true);
-        call.enqueue(new Callback<Cat>() {
-            @Override
-            public void onResponse(@NonNull Call<Cat> call, @NonNull Response<Cat> response) {
-                Cat catResponse = response.body();
-                mErrorView.setVisibility(View.GONE);
-                mCatView.setVisibility(View.VISIBLE);
-                if (catResponse != null) {
-                    bind(catResponse);
-                }
-                mRefreshOwner.setRefreshState(false);
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Cat> call, Throwable t) {
-                mErrorView.setVisibility(View.VISIBLE);
-                mCatView.setVisibility(View.GONE);
-                mRefreshOwner.setRefreshState(false);
-                Log.d("RETROFIT ERROR", "Error received:" + t.getMessage());
-            }
-        });
+        mDisposable = ApiService.getApiService().getCat(mId, "full", true)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> mRefreshOwner.setRefreshState(true))
+                .doFinally(() -> mRefreshOwner.setRefreshState(false))
+                .subscribe(
+                        response -> {
+                            mErrorView.setVisibility(View.GONE);
+                            mCatView.setVisibility(View.VISIBLE);
+                            bind(response);
+                        },
+                        throwable -> {
+                            mErrorView.setVisibility(View.VISIBLE);
+                            mCatView.setVisibility(View.GONE);
+                        });
     }
 
     private void bind(Cat cat) {
@@ -128,12 +120,14 @@ public class CatFragment extends Fragment implements Refreshable {
                 .centerCrop()
                 .into(mCatPhotoIv);
         mCatIdTv.setText("Cat id: " + cat.getId());
-
     }
 
     @Override
     public void onDetach() {
         mRefreshOwner = null;
+        if (mDisposable != null) {
+            mDisposable.dispose();
+        }
         super.onDetach();
     }
 }
