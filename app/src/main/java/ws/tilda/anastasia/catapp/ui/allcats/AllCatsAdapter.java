@@ -18,6 +18,7 @@ import java.util.List;
 
 import ws.tilda.anastasia.catapp.R;
 import ws.tilda.anastasia.catapp.data.model.Cat;
+import ws.tilda.anastasia.catapp.databinding.CatBinding;
 
 public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsViewHolder> {
 
@@ -34,8 +35,9 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
     @Override
     public AllCatsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        View view = inflater.inflate(R.layout.list_item_cat_layout, viewGroup, false);
-        return new AllCatsViewHolder(view);
+        CatBinding binding = CatBinding.inflate(inflater, viewGroup, false);
+
+        return new AllCatsViewHolder(binding.getRoot());
     }
 
     @Override
@@ -86,11 +88,11 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
                     .into(mCatPhoto);
 
             if (listener != null) {
-            itemView.setOnClickListener(v -> listener.onItemClick(
-                    cat.getId()
-            ));
+                itemView.setOnClickListener(v -> listener.onItemClick(
+                        cat.getId()
+                ));
+            }
         }
-    }
 
         private Bitmap getBitmap(String url) {
             try {
