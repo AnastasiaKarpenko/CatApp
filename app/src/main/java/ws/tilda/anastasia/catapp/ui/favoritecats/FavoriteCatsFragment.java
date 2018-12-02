@@ -74,16 +74,10 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, Favor
         int SPAN_COUNT = 2;
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
         mRecyclerView.setAdapter(mFavoriteCatsAdapter);
-
-        if (mFavoriteCatsAdapter.getItemCount() == 0) {
-            mErrorView.setVisibility(View.GONE);
-            mRecyclerView.setVisibility(View.GONE);
-            mEmptyView.setVisibility(View.VISIBLE);
-        }
-
         onRefreshData();
-
     }
+
+
 
     @Override
     public void onResume() {
@@ -108,13 +102,17 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, Favor
             @Override
             public void onResponse(@NonNull Call<List<FavoriteCat>> call, @NonNull Response<List<FavoriteCat>> response) {
                 List<FavoriteCat> catsResponse = response.body();
-                mErrorView.setVisibility(View.GONE);
-                mRecyclerView.setVisibility(View.VISIBLE);
-                if (catsResponse != null) {
+
+                if (catsResponse != null && !catsResponse.isEmpty()) {
                     mFavoriteCatsAdapter.addData(catsResponse, true);
                     mRefreshOwner.setRefreshState(false);
+                    mErrorView.setVisibility(View.GONE);
+                    mEmptyView.setVisibility(View.GONE);
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                } else {
+                    mEmptyView.setVisibility(View.VISIBLE);
                 }
-
+                mRefreshOwner.setRefreshState(false);
             }
 
             @Override
