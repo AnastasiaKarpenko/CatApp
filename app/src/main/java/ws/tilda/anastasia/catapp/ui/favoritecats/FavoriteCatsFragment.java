@@ -77,8 +77,6 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, Favor
         onRefreshData();
     }
 
-
-
     @Override
     public void onResume() {
         super.onResume();
