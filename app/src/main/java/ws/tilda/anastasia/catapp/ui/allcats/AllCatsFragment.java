@@ -72,7 +72,7 @@ public class AllCatsFragment extends Fragment implements Refreshable, AllCatsAda
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mAllCatsAdapter = new AllCatsAdapter();
+        mAllCatsAdapter = new AllCatsAdapter(this);
         int SPAN_COUNT = 2;
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
         mRecyclerView.setAdapter(mAllCatsAdapter);

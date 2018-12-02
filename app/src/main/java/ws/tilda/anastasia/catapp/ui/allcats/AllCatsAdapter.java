@@ -21,11 +21,13 @@ import ws.tilda.anastasia.catapp.data.model.Cat;
 
 public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsViewHolder> {
 
+
     @NonNull
     private final List<Cat> mCats = new ArrayList<>();
+    private final OnItemClickListener mOnItemClickListener;
 
-    public AllCatsAdapter() {
-
+    public AllCatsAdapter(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -39,16 +41,7 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
     @Override
     public void onBindViewHolder(@NonNull AllCatsViewHolder allCatsViewHolder, int i) {
         Cat cat = mCats.get(i);
-        String url = cat.getUrl();
-
-//        Tried to implement the logic of loading the images, but it does not work. Need to review later
-//        Bitmap photo = getBitmap(url);
-//        allCatsViewHolder.mCatPhoto.setImageBitmap(photo);
-
-        //Decided to use Glide for now
-        Glide.with(allCatsViewHolder.mCatPhoto.getContext()).load(url)
-                .centerCrop()
-                .into(allCatsViewHolder.mCatPhoto);
+        allCatsViewHolder.bind(cat, mOnItemClickListener);
     }
 
     @Override
@@ -66,20 +59,7 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
         notifyDataSetChanged();
     }
 
-    private Bitmap getBitmap(String url) {
-        try {
-            InputStream is = (InputStream) new URL(url).getContent();
-            Bitmap d = BitmapFactory.decodeStream(is);
-            is.close();
-            return d;
-
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
     public interface OnItemClickListener {
-
         void onItemClick(String catId);
     }
 
@@ -91,5 +71,38 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
             super(itemView);
             mCatPhoto = itemView.findViewById(R.id.cat_photo_iv);
         }
+
+        void bind(Cat cat, OnItemClickListener listener) {
+            String url = cat.getUrl();
+
+//        Tried to implement the logic of loading the images, but it does not work. Need to review later
+//        Bitmap photo = getBitmap(url);
+//        allCatsViewHolder.mCatPhoto.setImageBitmap(photo);
+
+
+            //Decided to use Glide for now
+            Glide.with(mCatPhoto.getContext()).load(url)
+                    .centerCrop()
+                    .into(mCatPhoto);
+
+            if (listener != null) {
+                itemView.setOnClickListener(v -> listener.onItemClick(
+                        cat.getId()
+                ));
+            }
+        }
+
+        private Bitmap getBitmap(String url) {
+            try {
+                InputStream is = (InputStream) new URL(url).getContent();
+                Bitmap d = BitmapFactory.decodeStream(is);
+                is.close();
+                return d;
+
+            } catch (Exception e) {
+                return null;
+            }
+        }
+
     }
 }

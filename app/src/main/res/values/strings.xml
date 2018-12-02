@@ -4,4 +4,7 @@
     <string name="title_favorite">Favorite</string>
     <string name="error">Something went wrong. Try again.</string>
     <string name="error_icon_content_description">Error icon</string>
+    <string name="cat_photo_description">Cat photo</string>
+    <string name="cat_id_tv">Cat Id:</string>
+    <string name="favorite_lable_checkbox">Favorite</string>
 </resources>
