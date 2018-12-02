@@ -58,12 +58,12 @@ public class AllCatsFragment extends Fragment implements Refreshable, AllCatsAda
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_all_cats, container, false);
+        return inflater.inflate(R.layout.fragment_cats_grid, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        mRecyclerView = view.findViewById(R.id.all_cats_recyclerview);
+        mRecyclerView = view.findViewById(R.id.cats_recyclerview);
         mErrorView = view.findViewById(R.id.errorView);
         mErrorView.setVisibility(View.GONE);
     }

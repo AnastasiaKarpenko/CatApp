@@ -3,13 +3,16 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context=".ui.favoritecats.FavoriteCatsFragment">
+             tools:context=".ui.allcats.AllCatsFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/favorite_cats_recyclerview"
+        android:id="@+id/cats_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginRight="4dp"
-        android:layout_marginLeft="4dp">
+        android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
+
+    <include
+        layout="@layout/view_error"
+        android:visibility="gone"/>
+
 </FrameLayout>

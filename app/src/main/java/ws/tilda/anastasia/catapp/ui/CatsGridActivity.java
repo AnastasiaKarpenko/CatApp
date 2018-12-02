@@ -21,19 +21,16 @@ public class CatsGridActivity extends AppCompatActivity implements SwipeRefreshL
     final Fragment mFragment1 = AllCatsFragment.newInstance();
     final Fragment mFragment2 = FavoriteCatsFragment.newInstance();
     final FragmentManager mFragmentManager = getSupportFragmentManager();
-    Fragment mActiveFragment = mFragment1;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = item -> {
         switch (item.getItemId()) {
             case R.id.navigation_all:
-                mFragmentManager.beginTransaction().hide(mActiveFragment).show(mFragment1).commit();
-                mActiveFragment = mFragment1;
+                switchToFragment(mFragment1);
                 return true;
             case R.id.navigation_favorite:
-                mFragmentManager.beginTransaction().hide(mActiveFragment).show(mFragment2).commit();
-                mActiveFragment = mFragment2;
+                switchToFragment(mFragment2);
                 return true;
         }
         return false;
@@ -49,9 +46,6 @@ public class CatsGridActivity extends AppCompatActivity implements SwipeRefreshL
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-//        mFragmentManager.beginTransaction().add(R.id.main_container, mFragment2, "2").hide(mFragment2).commit();
-//        mFragmentManager.beginTransaction().add(R.id.main_container, mFragment1, "1").commit();
 
         switchToFragment(mFragment1);
     }

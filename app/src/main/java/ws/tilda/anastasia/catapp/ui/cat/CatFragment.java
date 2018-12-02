@@ -22,7 +22,6 @@ import retrofit2.Response;
 import ws.tilda.anastasia.catapp.R;
 import ws.tilda.anastasia.catapp.data.api.ApiService;
 import ws.tilda.anastasia.catapp.data.model.Cat;
-import ws.tilda.anastasia.catapp.data.repository.Repository;
 import ws.tilda.anastasia.catapp.ui.RefreshOwner;
 import ws.tilda.anastasia.catapp.ui.Refreshable;
 
@@ -34,7 +33,7 @@ public class CatFragment extends Fragment implements Refreshable {
     private View mErrorView;
     private View mCatView;
     private String mId;
-    private Repository mRepository;
+
 
     private ImageView mCatPhotoIv;
     private TextView mCatIdTv;
@@ -54,8 +53,6 @@ public class CatFragment extends Fragment implements Refreshable {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mRepository = context instanceof Repository.RepositoryOwner ?
-                ((Repository.RepositoryOwner) context).obtainRepository() : null;
         mRefreshOwner = context instanceof RefreshOwner ? (RefreshOwner) context : null;
     }
 
@@ -144,7 +141,6 @@ public class CatFragment extends Fragment implements Refreshable {
 
     @Override
     public void onDetach() {
-        mRepository = null;
         mRefreshOwner = null;
         super.onDetach();
     }
