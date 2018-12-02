@@ -81,6 +81,12 @@ public class AllCatsFragment extends Fragment implements Refreshable, AllCatsAda
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        onRefreshData();
+    }
+
+    @Override
     public void onDetach() {
         mRepository = null;
         mRefreshOwner = null;

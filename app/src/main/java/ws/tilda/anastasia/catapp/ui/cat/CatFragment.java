@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -72,6 +73,13 @@ public class CatFragment extends Fragment implements Refreshable {
         mCatPhotoIv = view.findViewById(R.id.cat_image);
         mCatIdTv = view.findViewById(R.id.cat_id);
         mFavoriteCb = view.findViewById(R.id.favorite_checkbox);
+
+        mFavoriteCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                //Logic of making the cat favorite and vice versa
+            }
+        });
     }
 
     @Override
@@ -125,6 +133,12 @@ public class CatFragment extends Fragment implements Refreshable {
                 .centerCrop()
                 .into(mCatPhotoIv);
         mCatIdTv.setText("Cat id: " + cat.getId());
+
+//        if(cat instanceof FavoriteCat) {
+//            mFavoriteCb.setChecked(true);
+//        } else {
+//            mFavoriteCb.setChecked(false);
+//        }
 
     }
 

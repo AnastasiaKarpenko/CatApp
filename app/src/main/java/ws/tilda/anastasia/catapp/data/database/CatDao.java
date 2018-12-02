@@ -17,4 +17,5 @@ public interface CatDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCats(List<Cat> cats);
+
 }
