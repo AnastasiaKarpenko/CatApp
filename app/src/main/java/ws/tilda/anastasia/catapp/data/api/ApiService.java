@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ws.tilda.anastasia.catapp.BuildConfig;
 
@@ -35,6 +36,7 @@ public class ApiService {
                     .baseUrl(BuildConfig.API_URL)
                     .client(getClient())
                     .addConverterFactory(GsonConverterFactory.create(sGson))
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
         }
         return sRetrofit;
