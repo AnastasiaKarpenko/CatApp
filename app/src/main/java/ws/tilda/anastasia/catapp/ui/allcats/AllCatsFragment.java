@@ -8,19 +8,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import ws.tilda.anastasia.catapp.R;
 import ws.tilda.anastasia.catapp.data.api.ApiService;
-import ws.tilda.anastasia.catapp.data.model.Cat;
 import ws.tilda.anastasia.catapp.data.repository.Repository;
 import ws.tilda.anastasia.catapp.ui.RefreshOwner;
 import ws.tilda.anastasia.catapp.ui.Refreshable;
@@ -33,6 +29,7 @@ public class AllCatsFragment extends Fragment implements Refreshable, AllCatsAda
     private RefreshOwner mRefreshOwner;
     private View mErrorView;
     private Repository mRepository;
+    private Disposable mDisposable;
 
     public AllCatsFragment() {
         // Required empty public constructor
@@ -90,6 +87,9 @@ public class AllCatsFragment extends Fragment implements Refreshable, AllCatsAda
     public void onDetach() {
         mRepository = null;
         mRefreshOwner = null;
+        if (mDisposable != null) {
+            mDisposable.dispose();
+        }
         super.onDetach();
     }
 
@@ -99,26 +99,24 @@ public class AllCatsFragment extends Fragment implements Refreshable, AllCatsAda
     }
 
     private void getAllCats() {
-        Call<List<Cat>> call = ApiService.getApiService().getAllCats("small", "DESC", 0, 10);
-        call.enqueue(new Callback<List<Cat>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Cat>> call, @NonNull Response<List<Cat>> response) {
-                List<Cat> catsResponse = response.body();
-                mErrorView.setVisibility(View.GONE);
-                mRecyclerView.setVisibility(View.VISIBLE);
-                mRepository.insertCats(catsResponse);
-                mAllCatsAdapter.addData(catsResponse, true);
-                mRefreshOwner.setRefreshState(false);
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<Cat>> call, Throwable t) {
-                mErrorView.setVisibility(View.VISIBLE);
-                mRecyclerView.setVisibility(View.GONE);
-                mRefreshOwner.setRefreshState(false);
-                Log.d("RETROFIT ERROR", "Error received:" + t.getMessage());
-            }
-        });
+        mDisposable = ApiService.getApiService().getAllCats("small", "DESC", 0, 10)
+                .doOnSuccess(response -> mRepository.insertCats(response))
+                .onErrorReturn(throwable ->
+                        ApiService.NETWORK_EXCEPTIONS.contains(throwable.getClass()) ? mRepository.getAllCats() : null)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> mRefreshOwner.setRefreshState(true))
+                .doFinally(() -> mRefreshOwner.setRefreshState(false))
+                .subscribe(
+                        response -> {
+                            mErrorView.setVisibility(View.GONE);
+                            mRecyclerView.setVisibility(View.VISIBLE);
+                            mAllCatsAdapter.addData(response, true);
+                        },
+                        throwable -> {
+                            mErrorView.setVisibility(View.VISIBLE);
+                            mRecyclerView.setVisibility(View.GONE);
+                        });
     }
 
     @Override

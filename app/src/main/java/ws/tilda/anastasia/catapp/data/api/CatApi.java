@@ -2,6 +2,7 @@ package ws.tilda.anastasia.catapp.data.api;
 
 import java.util.List;
 
+import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -14,10 +15,10 @@ import ws.tilda.anastasia.catapp.data.model.FavoriteCat;
 public interface CatApi {
     @Headers({"Content-Type: application/json", "x-api-key: " + BuildConfig.API_KEY})
     @GET("/v1/images/search")
-    Call<List<Cat>> getAllCats(@Query("size") String size,
-                               @Query("order") String order,
-                               @Query("page") int page,
-                               @Query("limit") int limit);
+    Single<List<Cat>> getAllCats(@Query("size") String size,
+                                 @Query("order") String order,
+                                 @Query("page") int page,
+                                 @Query("limit") int limit);
 
     @Headers({"Content-Type: application/json", "x-api-key: " + BuildConfig.API_KEY})
     @GET("/v1/images/{image_id}")
