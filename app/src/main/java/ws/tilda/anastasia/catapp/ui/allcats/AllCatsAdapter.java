@@ -1,22 +1,14 @@
 package ws.tilda.anastasia.catapp.ui.allcats;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import ws.tilda.anastasia.catapp.R;
 import ws.tilda.anastasia.catapp.data.model.Cat;
 import ws.tilda.anastasia.catapp.databinding.CatBinding;
 
@@ -37,7 +29,7 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         CatBinding binding = CatBinding.inflate(inflater, viewGroup, false);
 
-        return new AllCatsViewHolder(binding.getRoot());
+        return new AllCatsViewHolder(binding);
     }
 
     @Override
@@ -67,44 +59,30 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
 
 
     class AllCatsViewHolder extends RecyclerView.ViewHolder {
+        private CatBinding mCatBinding;
         ImageView mCatPhoto;
 
-        AllCatsViewHolder(@NonNull View itemView) {
-            super(itemView);
-            mCatPhoto = itemView.findViewById(R.id.cat_photo_iv);
+        AllCatsViewHolder(@NonNull CatBinding binding) {
+            super(binding.getRoot());
+            mCatBinding = binding;
+
         }
 
         void bind(Cat cat, OnItemClickListener listener) {
-            String url = cat.getUrl();
 
-//        Tried to implement the logic of loading the images, but it does not work. Need to review later
-//        Bitmap photo = getBitmap(url);
-//        mCatPhoto.setImageBitmap(photo);
+            mCatBinding.setCat(new CatListItemViewModel(cat));
+            mCatBinding.executePendingBindings();
 
-
-            //Decided to use Glide for now
-            Glide.with(mCatPhoto.getContext()).load(url)
-                    .centerCrop()
-                    .into(mCatPhoto);
-
-            if (listener != null) {
-                itemView.setOnClickListener(v -> listener.onItemClick(
-                        cat.getId()
-                ));
-            }
+//            //Decided to use Glide for now
+//            Glide.with(mCatPhoto.getContext()).load(url)
+//                    .centerCrop()
+//                    .into(mCatPhoto);
+//
+//            if (listener != null) {
+//                itemView.setOnClickListener(v -> listener.onItemClick(
+//                        cat.getId()
+//                ));
+//            }
         }
-
-        private Bitmap getBitmap(String url) {
-            try {
-                InputStream is = (InputStream) new URL(url).getContent();
-                Bitmap bitmap = BitmapFactory.decodeStream(is);
-                is.close();
-                return bitmap;
-
-            } catch (Exception e) {
-                return null;
-            }
-        }
-
     }
 }
