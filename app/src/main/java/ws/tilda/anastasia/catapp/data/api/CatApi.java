@@ -31,9 +31,6 @@ public interface CatApi {
     @GET("/v1/favourites")
     Call<List<FavoriteCat>> getFavoriteCats();
 
-    @GET("/v1/favourites/{favourite_id}")
-    Call<FavoriteCat> getFavoriteCat(@Path("favourite_id") String favoriteId);
-
 //    @POST("/v1/favourites")
 //    void setAsFavorite(@Body String catId);
 

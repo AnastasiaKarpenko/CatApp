@@ -6,7 +6,7 @@ import android.arch.persistence.room.RoomDatabase;
 import ws.tilda.anastasia.catapp.data.model.Cat;
 import ws.tilda.anastasia.catapp.data.model.FavoriteCat;
 
-@Database(entities = {Cat.class, FavoriteCat.class}, version = 1)
+@Database(entities = {Cat.class}, version = 1)
 public abstract class CatDatabase extends RoomDatabase {
 
     public abstract CatDao getCatDao();
