@@ -1,10 +1,10 @@
 package ws.tilda.anastasia.catapp.ui.favoritecats;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +16,7 @@ import ws.tilda.anastasia.catapp.ui.allcats.AllCatsFragment;
 import ws.tilda.anastasia.catapp.ui.cat.CatActivity;
 import ws.tilda.anastasia.catapp.ui.cat.CatFragment;
 import ws.tilda.anastasia.catapp.ui.viewmodels.CatsViewModel;
+import ws.tilda.anastasia.catapp.ui.viewmodels.CustomFactory;
 
 public class FavoriteCatsFragment extends AllCatsFragment {
 
@@ -42,7 +43,8 @@ public class FavoriteCatsFragment extends AllCatsFragment {
 
         if (context instanceof Repository.RepositoryOwner) {
             Repository repository = ((Repository.RepositoryOwner) context).obtainRepository();
-            mCatsViewModel = new CatsViewModel(repository, mOnItemClickListener);
+            CustomFactory customFactory = new CustomFactory(repository, mOnItemClickListener);
+            mCatsViewModel = ViewModelProviders.of(this, customFactory).get(CatsViewModel.class);
         }
     }
 
@@ -51,14 +53,10 @@ public class FavoriteCatsFragment extends AllCatsFragment {
                              Bundle savedInstanceState) {
         CatsBinding binding = CatsBinding.inflate(inflater, container, false);
         binding.setVm(mCatsViewModel);
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
+        binding.setLifecycleOwner(this);
         mCatsViewModel.loadFavoriteCats();
+
+        return binding.getRoot();
     }
 
 }

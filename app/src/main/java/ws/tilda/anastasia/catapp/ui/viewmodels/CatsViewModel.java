@@ -27,7 +27,9 @@ public class CatsViewModel extends ViewModel {
     private MutableLiveData<Boolean> mIsErrorVisible = new MutableLiveData<>();
     private MutableLiveData<Boolean> mIsLoading = new MutableLiveData<>();
     private MutableLiveData<List<MainCat>> mCats = new MutableLiveData<>();
-    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = () -> loadAllCats();
+    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = () -> {
+        loadAllCats();
+    };
 
     public CatsViewModel(Repository repository, CatsAdapter.OnItemClickListener onItemClickListener) {
         mRepository = repository;
@@ -40,7 +42,6 @@ public class CatsViewModel extends ViewModel {
         mDisposable = ApiService.getApiService().getAllCats("small", "DESC", 0, 20)
                 .doOnSuccess(response -> mRepository.insertCats(catsToMainCats(response)))
                 .doOnError(throwable -> {
-                    //mCats.clear();
                     mCats.postValue(mRepository.getAllCats());
                 })
                 .subscribeOn(Schedulers.io())
@@ -50,7 +51,6 @@ public class CatsViewModel extends ViewModel {
                 .subscribe(
                         response -> {
                             mIsErrorVisible.postValue(false);
-                            //mCats.clear();
                             mCats.postValue(catsToMainCats(response));
 
                         },
