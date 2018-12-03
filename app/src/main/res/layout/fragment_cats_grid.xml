@@ -2,7 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data class="CatsBinding">
-        <import type="android.view.View" alias="V"/>
+
+        <import
+            alias="V"
+            type="android.view.View"/>
 
         <variable
             name="vm"
@@ -28,7 +31,7 @@
 
             <include
                 layout="@layout/view_error"
-                android:visibility="gone"/>
+                android:visibility="@{vm.isErrorVisible ? V.VISIBLE : V.GONE}"/>
 
             <include
                 layout="@layout/view_empty"
