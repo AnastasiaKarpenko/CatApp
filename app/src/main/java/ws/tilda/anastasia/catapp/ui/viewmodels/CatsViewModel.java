@@ -13,6 +13,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ws.tilda.anastasia.catapp.data.api.ApiService;
 import ws.tilda.anastasia.catapp.data.model.Cat;
+import ws.tilda.anastasia.catapp.data.model.FavoriteCat;
 import ws.tilda.anastasia.catapp.data.model.MainCat;
 import ws.tilda.anastasia.catapp.data.repository.Repository;
 import ws.tilda.anastasia.catapp.ui.adapters.CatsAdapter;
@@ -22,6 +23,7 @@ public class CatsViewModel {
     private Repository mRepository;
     private CatsAdapter.OnItemClickListener mOnItemClickListener;
 
+    private ObservableBoolean mIsFavCatsEmpty = new ObservableBoolean(false);
     private ObservableBoolean mIsErrorVisible = new ObservableBoolean(false);
     private ObservableBoolean mIsLoading = new ObservableBoolean(false);
     private ObservableArrayList<MainCat> mCats = new ObservableArrayList<>();
@@ -34,8 +36,8 @@ public class CatsViewModel {
 
 
     public void loadAllCats() {
-        mDisposable = ApiService.getApiService().getAllCats("small", "DESC", 0, 10)
-                .doOnSuccess(response -> mRepository.insertCats(getMainCats(response)))
+        mDisposable = ApiService.getApiService().getAllCats("small", "DESC", 0, 20)
+                .doOnSuccess(response -> mRepository.insertCats(catsToMainCats(response)))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> mIsLoading.set(true))
@@ -43,7 +45,7 @@ public class CatsViewModel {
                 .subscribe(
                         response -> {
                             mIsErrorVisible.set(false);
-                            mCats.addAll(getMainCats(response));
+                            mCats.addAll(catsToMainCats(response));
 
                         },
                         throwable -> {
@@ -52,12 +54,46 @@ public class CatsViewModel {
                         });
     }
 
-    private List<MainCat> getMainCats(List<Cat> cats) {
+    public void loadFavoriteCats() {
+        mDisposable = ApiService.getApiService().getFavoriteCats()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> mIsLoading.set(true))
+                .doFinally(() -> mIsLoading.set(false))
+                .subscribe(
+                        response -> {
+                            mIsErrorVisible.set(false);
+                            if (response != null && !response.isEmpty()) {
+                                mCats.addAll(favoriteCatsToMainCats(response));
+                            } else {
+                                mIsFavCatsEmpty.set(true);
+                            }
+                        },
+                        throwable -> {
+                            mIsErrorVisible.set(false);
+                            Log.d("loadFavoriteCats():ERR ", throwable.getMessage());
+                        });
+
+    }
+
+    private List<MainCat> catsToMainCats(List<Cat> cats) {
         List<MainCat> mainCats = new ArrayList<>();
         for (Cat cat : cats) {
             MainCat mainCat = new MainCat();
             mainCat.setCatId(cat.getId());
             mainCat.setPhotoUrl(cat.getUrl());
+            mainCats.add(mainCat);
+        }
+        return mainCats;
+    }
+
+    private List<MainCat> favoriteCatsToMainCats(List<FavoriteCat> cats) {
+        List<MainCat> mainCats = new ArrayList<>();
+        for (FavoriteCat cat : cats) {
+            MainCat mainCat = new MainCat();
+            mainCat.setCatId(cat.getImage().getId());
+            mainCat.setPhotoUrl(cat.getImage().getUrl());
+            mainCat.setFavoriteId(cat.getId());
             mainCats.add(mainCat);
         }
         return mainCats;
@@ -88,5 +124,9 @@ public class CatsViewModel {
 
     public SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
         return mOnRefreshListener;
+    }
+
+    public ObservableBoolean getIsFavCatsEmpty() {
+        return mIsFavCatsEmpty;
     }
 }

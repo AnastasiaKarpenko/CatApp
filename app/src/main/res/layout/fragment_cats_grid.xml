@@ -21,17 +21,18 @@
         bind:onRefresh="@{vm.onRefreshListener}"
         bind:refreshState="@{vm.isLoading}">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/cats_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="@{vm.isErrorVisible ? V.GONE : V.VISIBLE}"
-                bind:data="@{vm.cats}"
-                bind:clickHandler="@{vm.onItemClickListener}">
+                bind:clickHandler="@{vm.onItemClickListener}"
+                bind:data="@{vm.cats}">
             </android.support.v7.widget.RecyclerView>
 
             <include
@@ -40,9 +41,9 @@
 
             <include
                 layout="@layout/view_empty"
-                android:visibility="gone"/>
+                android:visibility="@{vm.isFavCatsEmpty ? V.VISIBLE : V.GONE}"/>
 
-        </FrameLayout>
+        </LinearLayout>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
