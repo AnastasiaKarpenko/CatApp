@@ -36,6 +36,5 @@ public class CustomBindingAdapter {
 
         layout.setOnRefreshListener(listener);
         layout.post(() -> layout.setRefreshing(isLoading));
-
     }
 }
