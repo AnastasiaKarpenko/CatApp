@@ -85,4 +85,8 @@ public class CatsViewModel {
     public ObservableArrayList<MainCat> getCats() {
         return mCats;
     }
+
+    public SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
+        return mOnRefreshListener;
+    }
 }
