@@ -29,7 +29,9 @@
                 android:id="@+id/cats_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="@{vm.isErrorVisible ? V.GONE : V.VISIBLE}">
+                android:visibility="@{vm.isErrorVisible ? V.GONE : V.VISIBLE}"
+                bind:data="@{vm.cats}"
+                bind:clickHandler="@{vm.onItemClickListener}">
             </android.support.v7.widget.RecyclerView>
 
             <include
