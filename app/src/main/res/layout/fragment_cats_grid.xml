@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".ui.allcats.AllCatsFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/cats_recyclerview"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                              android:layout_width="match_parent"
+                                              android:layout_height="match_parent">
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </android.support.v7.widget.RecyclerView>
 
-    <include
-        layout="@layout/view_error"
-        android:visibility="gone"/>
-    <include
-        layout="@layout/view_empty"
-        android:visibility="gone"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/cats_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </android.support.v7.widget.RecyclerView>
 
-</FrameLayout>
+        <include
+            layout="@layout/view_error"
+            android:visibility="gone"/>
+
+        <include
+            layout="@layout/view_empty"
+            android:visibility="gone"/>
+
+    </FrameLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>
+
+
