@@ -17,15 +17,25 @@ import ws.tilda.anastasia.catapp.ui.cat.CatActivity;
 import ws.tilda.anastasia.catapp.ui.cat.CatFragment;
 import ws.tilda.anastasia.catapp.ui.viewmodels.CatsViewModel;
 
-public class AllCatsFragment extends Fragment implements
-        CatsAdapter.OnItemClickListener {
+public class AllCatsFragment extends Fragment {
 
 //    private RecyclerView mRecyclerView;
 //    private CatsAdapter mCatsAdapter;
 //    private View mErrorView;
 //    private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    CatsViewModel mCatsViewModel;
+    private CatsViewModel mCatsViewModel;
+    private CatsAdapter.OnItemClickListener mOnItemClickListener =
+            new CatsAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(String catId) {
+                    Intent intent = new Intent(getActivity(), CatActivity.class);
+                    Bundle args = new Bundle();
+                    args.putString(CatFragment.CAT_ID_KEY, catId);
+                    intent.putExtra(CatActivity.CAT_ID_KEY, args);
+                    startActivity(intent);
+                }
+            };
 
     public AllCatsFragment() {
         // Required empty public constructor
@@ -41,7 +51,7 @@ public class AllCatsFragment extends Fragment implements
 
         if (context instanceof Repository.RepositoryOwner) {
             Repository repository = ((Repository.RepositoryOwner) context).obtainRepository();
-            mCatsViewModel = new CatsViewModel(repository);
+            mCatsViewModel = new CatsViewModel(repository, mOnItemClickListener);
         }
     }
 
@@ -88,12 +98,4 @@ public class AllCatsFragment extends Fragment implements
 //    }
 
 
-    @Override
-    public void onItemClick(String catId) {
-        Intent intent = new Intent(getActivity(), CatActivity.class);
-        Bundle args = new Bundle();
-        args.putString(CatFragment.CAT_ID_KEY, catId);
-        intent.putExtra(CatActivity.CAT_ID_KEY, args);
-        startActivity(intent);
-    }
 }

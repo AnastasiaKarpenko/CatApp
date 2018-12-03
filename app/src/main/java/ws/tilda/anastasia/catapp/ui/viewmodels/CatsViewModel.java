@@ -14,18 +14,21 @@ import ws.tilda.anastasia.catapp.data.api.ApiService;
 import ws.tilda.anastasia.catapp.data.model.Cat;
 import ws.tilda.anastasia.catapp.data.model.MainCat;
 import ws.tilda.anastasia.catapp.data.repository.Repository;
+import ws.tilda.anastasia.catapp.ui.adapters.CatsAdapter;
 
 public class CatsViewModel {
     private Disposable mDisposable;
     private Repository mRepository;
+    private CatsAdapter.OnItemClickListener mOnItemClickListener;
 
     private ObservableBoolean mIsErrorVisible = new ObservableBoolean(false);
     private ObservableBoolean mIsLoading = new ObservableBoolean(false);
     private ObservableArrayList<MainCat> mCats = new ObservableArrayList<>();
 
 
-    public CatsViewModel(Repository repository) {
+    public CatsViewModel(Repository repository, CatsAdapter.OnItemClickListener onItemClickListener) {
         mRepository = repository;
+        mOnItemClickListener = onItemClickListener;
     }
 
 
