@@ -3,13 +3,13 @@ package ws.tilda.anastasia.catapp.ui.viewmodels;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.arch.paging.PagedList;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ws.tilda.anastasia.catapp.data.api.ApiService;
@@ -25,7 +25,7 @@ public class AllCatsViewModel extends ViewModel {
 
     private MutableLiveData<Boolean> mIsErrorVisible = new MutableLiveData<>();
     private MutableLiveData<Boolean> mIsLoading = new MutableLiveData<>();
-    private LiveData<List<MainCat>> mCats;
+    private LiveData<PagedList<MainCat>> mCats;
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = () -> {
         updateAllCats();
     };
@@ -33,7 +33,7 @@ public class AllCatsViewModel extends ViewModel {
     public AllCatsViewModel(Repository repository, CatsAdapter.OnItemClickListener onItemClickListener) {
         mRepository = repository;
         mOnItemClickListener = onItemClickListener;
-        mCats = mRepository.getAllCatsLive();
+        mCats = mRepository.getAllCatsPaged();
     }
 
     private void updateAllCats() {
@@ -86,7 +86,7 @@ public class AllCatsViewModel extends ViewModel {
         return mIsLoading;
     }
 
-    public LiveData<List<MainCat>> getCats() {
+    public LiveData<PagedList<MainCat>> getCats() {
         return mCats;
     }
 }
