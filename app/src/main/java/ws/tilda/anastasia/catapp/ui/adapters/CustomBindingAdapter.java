@@ -2,6 +2,7 @@ package ws.tilda.anastasia.catapp.ui.adapters;
 
 import android.databinding.BindingAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 
@@ -26,8 +27,8 @@ public class CustomBindingAdapter {
                                              List<MainCat> cats,
                                              CatsAdapter.OnItemClickListener onItemClickListener) {
         CatsAdapter catsAdapter = new CatsAdapter(cats, onItemClickListener);
+        recyclerView.setLayoutManager(new GridLayoutManager(recyclerView.getContext(), 2));
         recyclerView.setAdapter(catsAdapter);
-
     }
 
     @BindingAdapter({"bind:refreshState", "bind:onRefresh"})
