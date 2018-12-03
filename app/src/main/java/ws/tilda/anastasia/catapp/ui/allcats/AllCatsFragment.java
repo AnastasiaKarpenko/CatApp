@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,19 +25,19 @@ import ws.tilda.anastasia.catapp.data.api.ApiService;
 import ws.tilda.anastasia.catapp.data.model.Cat;
 import ws.tilda.anastasia.catapp.data.model.MainCat;
 import ws.tilda.anastasia.catapp.data.repository.Repository;
-import ws.tilda.anastasia.catapp.ui.RefreshOwner;
-import ws.tilda.anastasia.catapp.ui.Refreshable;
 import ws.tilda.anastasia.catapp.ui.adapters.CatsAdapter;
 import ws.tilda.anastasia.catapp.ui.cat.CatActivity;
 import ws.tilda.anastasia.catapp.ui.cat.CatFragment;
 
-public class AllCatsFragment extends Fragment implements Refreshable, CatsAdapter.OnItemClickListener {
+public class AllCatsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
+        CatsAdapter.OnItemClickListener {
+
     private RecyclerView mRecyclerView;
     private CatsAdapter mCatsAdapter;
-    private RefreshOwner mRefreshOwner;
     private View mErrorView;
     private Repository mRepository;
     private Disposable mDisposable;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public AllCatsFragment() {
         // Required empty public constructor
@@ -53,10 +54,6 @@ public class AllCatsFragment extends Fragment implements Refreshable, CatsAdapte
         if (context instanceof Repository.RepositoryOwner) {
             mRepository = ((Repository.RepositoryOwner) context).obtainRepository();
         }
-
-        if (context instanceof RefreshOwner) {
-            mRefreshOwner = ((RefreshOwner) context);
-        }
     }
 
     @Override
@@ -67,6 +64,7 @@ public class AllCatsFragment extends Fragment implements Refreshable, CatsAdapte
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        mSwipeRefreshLayout = view.findViewById(R.id.refresher);
         mRecyclerView = view.findViewById(R.id.cats_recyclerview);
         mErrorView = view.findViewById(R.id.errorView);
         mErrorView.setVisibility(View.GONE);
@@ -76,24 +74,19 @@ public class AllCatsFragment extends Fragment implements Refreshable, CatsAdapte
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
         mCatsAdapter = new CatsAdapter(this);
         int SPAN_COUNT = 2;
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
         mRecyclerView.setAdapter(mCatsAdapter);
 
-        onRefreshData();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        onRefreshData();
+        onRefresh();
     }
 
     @Override
     public void onDetach() {
         mRepository = null;
-        mRefreshOwner = null;
         if (mDisposable != null) {
             mDisposable.dispose();
         }
@@ -101,7 +94,7 @@ public class AllCatsFragment extends Fragment implements Refreshable, CatsAdapte
     }
 
     @Override
-    public void onRefreshData() {
+    public void onRefresh() {
         getAllCats();
     }
 
@@ -110,8 +103,8 @@ public class AllCatsFragment extends Fragment implements Refreshable, CatsAdapte
                 .doOnSuccess(response -> mRepository.insertCats(getMainCats(response)))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> mRefreshOwner.setRefreshState(true))
-                .doFinally(() -> mRefreshOwner.setRefreshState(false))
+                .doOnSubscribe(disposable -> mSwipeRefreshLayout.setRefreshing(true))
+                .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
                 .subscribe(
                         response -> {
                             mErrorView.setVisibility(View.GONE);
@@ -124,7 +117,7 @@ public class AllCatsFragment extends Fragment implements Refreshable, CatsAdapte
                         throwable -> {
                             mErrorView.setVisibility(View.VISIBLE);
                             mRecyclerView.setVisibility(View.GONE);
-                            Log.d("ERROR",throwable.getMessage() );
+                            Log.d("ERROR", throwable.getMessage());
                         });
     }
 

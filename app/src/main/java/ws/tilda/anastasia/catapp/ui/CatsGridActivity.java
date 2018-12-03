@@ -5,7 +5,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 
 import ws.tilda.anastasia.catapp.MyApplication;
@@ -14,10 +13,8 @@ import ws.tilda.anastasia.catapp.data.repository.Repository;
 import ws.tilda.anastasia.catapp.ui.allcats.AllCatsFragment;
 import ws.tilda.anastasia.catapp.ui.favoritecats.FavoriteCatsFragment;
 
-public class CatsGridActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,
-        RefreshOwner, Repository.RepositoryOwner {
+public class CatsGridActivity extends AppCompatActivity implements Repository.RepositoryOwner {
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     final Fragment mFragment1 = AllCatsFragment.newInstance();
     final Fragment mFragment2 = FavoriteCatsFragment.newInstance();
     final FragmentManager mFragmentManager = getSupportFragmentManager();
@@ -41,9 +38,6 @@ public class CatsGridActivity extends AppCompatActivity implements SwipeRefreshL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cats_grid);
 
-        mSwipeRefreshLayout = findViewById(R.id.refresher);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -53,21 +47,6 @@ public class CatsGridActivity extends AppCompatActivity implements SwipeRefreshL
     private void switchToFragment(Fragment fragment) {
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.replace(R.id.main_container, fragment).commit();
-    }
-
-    @Override
-    public void onRefresh() {
-        Fragment fragment = mFragmentManager.findFragmentById(R.id.main_container);
-        if (fragment instanceof Refreshable) {
-            ((Refreshable) fragment).onRefreshData();
-        } else {
-            setRefreshState(false);
-        }
-    }
-
-    @Override
-    public void setRefreshState(boolean refreshing) {
-        mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(refreshing));
     }
 
     @Override

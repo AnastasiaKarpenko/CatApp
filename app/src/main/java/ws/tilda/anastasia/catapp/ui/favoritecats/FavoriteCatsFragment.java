@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,19 +23,19 @@ import ws.tilda.anastasia.catapp.R;
 import ws.tilda.anastasia.catapp.data.api.ApiService;
 import ws.tilda.anastasia.catapp.data.model.FavoriteCat;
 import ws.tilda.anastasia.catapp.data.model.MainCat;
-import ws.tilda.anastasia.catapp.ui.RefreshOwner;
-import ws.tilda.anastasia.catapp.ui.Refreshable;
 import ws.tilda.anastasia.catapp.ui.adapters.CatsAdapter;
 import ws.tilda.anastasia.catapp.ui.cat.CatActivity;
 import ws.tilda.anastasia.catapp.ui.cat.CatFragment;
 
-public class FavoriteCatsFragment extends Fragment implements Refreshable, CatsAdapter.OnItemClickListener {
+public class FavoriteCatsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
+        CatsAdapter.OnItemClickListener {
     private RecyclerView mRecyclerView;
     private CatsAdapter mCatsAdapter;
-    private RefreshOwner mRefreshOwner;
     private View mErrorView;
     private View mEmptyView;
     private Disposable mDisposable;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
 
     public FavoriteCatsFragment() {
         // Required empty public constructor
@@ -47,10 +48,6 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, CatsA
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
-        if (context instanceof RefreshOwner) {
-            mRefreshOwner = ((RefreshOwner) context);
-        }
     }
 
     @Override
@@ -61,6 +58,7 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, CatsA
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        mSwipeRefreshLayout = view.findViewById(R.id.refresher);
         mRecyclerView = view.findViewById(R.id.cats_recyclerview);
         mErrorView = view.findViewById(R.id.errorView);
         mErrorView.setVisibility(View.GONE);
@@ -73,22 +71,16 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, CatsA
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         mCatsAdapter = new CatsAdapter(this);
         int SPAN_COUNT = 2;
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
         mRecyclerView.setAdapter(mCatsAdapter);
-        onRefreshData();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        onRefreshData();
+        onRefresh();
     }
 
     @Override
     public void onDetach() {
-        mRefreshOwner = null;
         if (mDisposable != null) {
             mDisposable.dispose();
         }
@@ -96,7 +88,7 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, CatsA
     }
 
     @Override
-    public void onRefreshData() {
+    public void onRefresh() {
         getFavoriteCats();
     }
 
@@ -104,8 +96,8 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, CatsA
         mDisposable = ApiService.getApiService().getFavoriteCats()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> mRefreshOwner.setRefreshState(true))
-                .doFinally(() -> mRefreshOwner.setRefreshState(false))
+                .doOnSubscribe(disposable -> mSwipeRefreshLayout.setRefreshing(true))
+                .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
                 .subscribe(
                         response -> {
                             mErrorView.setVisibility(View.GONE);
@@ -144,4 +136,5 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, CatsA
         intent.putExtra(CatActivity.CAT_ID_KEY, args);
         startActivity(intent);
     }
+
 }
