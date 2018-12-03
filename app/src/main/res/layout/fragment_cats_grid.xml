@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data class="CatsBinding">
+        <import type="android.view.View" alias="V"/>
 
         <variable
             name="vm"
@@ -21,7 +22,8 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/cats_recyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="@{vm.isErrorVisible ? V.GONE : V.VISIBLE}">
             </android.support.v7.widget.RecyclerView>
 
             <include
