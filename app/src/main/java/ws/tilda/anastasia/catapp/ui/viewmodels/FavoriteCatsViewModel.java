@@ -47,7 +47,6 @@ public class FavoriteCatsViewModel extends ViewModel {
                         response -> {
                             mIsErrorVisible.postValue(false);
                             if (response != null && !response.isEmpty()) {
-                                //mCats.clear();
                                 mCats.postValue(favoriteCatsToMainCats(response));
                             } else {
                                 mIsFavCatsEmpty.postValue(true);

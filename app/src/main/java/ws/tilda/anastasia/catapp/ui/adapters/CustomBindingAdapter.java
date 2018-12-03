@@ -1,5 +1,7 @@
 package ws.tilda.anastasia.catapp.ui.adapters;
 
+import android.arch.paging.PagedList;
+import android.arch.paging.PagedListAdapter;
 import android.databinding.BindingAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -24,9 +26,10 @@ public class CustomBindingAdapter {
 
     @BindingAdapter({"bind:data", "bind:clickHandler"})
     public static void configureRecyclerView(RecyclerView recyclerView,
-                                             List<MainCat> cats,
+                                             PagedList<MainCat> cats,
                                              CatsAdapter.OnItemClickListener onItemClickListener) {
-        CatsAdapter catsAdapter = new CatsAdapter(cats, onItemClickListener);
+        CatsAdapter catsAdapter = new CatsAdapter(onItemClickListener);
+        catsAdapter.submitList(cats);
         recyclerView.setLayoutManager(new GridLayoutManager(recyclerView.getContext(), 2));
         recyclerView.setAdapter(catsAdapter);
     }

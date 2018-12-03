@@ -1,26 +1,28 @@
 package ws.tilda.anastasia.catapp.ui.adapters;
 
+import android.arch.paging.PagedListAdapter;
 import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.List;
 
+import ws.tilda.anastasia.catapp.data.model.Cat;
 import ws.tilda.anastasia.catapp.data.model.MainCat;
 import ws.tilda.anastasia.catapp.databinding.CatBinding;
 import ws.tilda.anastasia.catapp.ui.viewmodels.CatListItemViewModel;
 
-public class CatsAdapter extends RecyclerView.Adapter<CatsAdapter.AllCatsViewHolder> {
+public class CatsAdapter extends PagedListAdapter<MainCat, CatsAdapter.AllCatsViewHolder> {
 
 
     @NonNull
-    private final List<MainCat> mCats;
     private final OnItemClickListener mOnItemClickListener;
 
-    public CatsAdapter(List<MainCat> cats, OnItemClickListener onItemClickListener) {
+    public CatsAdapter(OnItemClickListener onItemClickListener) {
+        super(CALLBACK);
         mOnItemClickListener = onItemClickListener;
-        mCats = cats;
     }
 
     @NonNull
@@ -34,14 +36,25 @@ public class CatsAdapter extends RecyclerView.Adapter<CatsAdapter.AllCatsViewHol
 
     @Override
     public void onBindViewHolder(@NonNull AllCatsViewHolder allCatsViewHolder, int i) {
-        MainCat cat = mCats.get(i);
-        allCatsViewHolder.bind(cat, mOnItemClickListener);
+        MainCat cat = getItem(i);
+        if (cat != null) {
+            allCatsViewHolder.bind(cat, mOnItemClickListener);
+        }
+
     }
 
-    @Override
-    public int getItemCount() {
-        return mCats == null ? 0 : mCats.size();
-    }
+    private static final DiffUtil.ItemCallback<MainCat> CALLBACK = new DiffUtil.ItemCallback<MainCat>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull MainCat oldItem, @NonNull MainCat newItem) {
+            return oldItem.getCatId() == newItem.getCatId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull MainCat oldItem, @NonNull MainCat newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
+
 
     public interface OnItemClickListener {
         void onItemClick(String catId);
@@ -59,10 +72,9 @@ public class CatsAdapter extends RecyclerView.Adapter<CatsAdapter.AllCatsViewHol
         void bind(MainCat cat, OnItemClickListener listener) {
 
             mCatBinding.setCat(new CatListItemViewModel(cat));
-            mCatBinding.setOnItemClickListener(mOnItemClickListener);
+            mCatBinding.setOnItemClickListener(listener);
             mCatBinding.executePendingBindings();
         }
-
 
     }
 }

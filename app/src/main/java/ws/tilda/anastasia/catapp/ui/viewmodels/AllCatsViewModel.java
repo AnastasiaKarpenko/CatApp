@@ -37,7 +37,7 @@ public class AllCatsViewModel extends ViewModel {
     }
 
     private void updateAllCats() {
-        mDisposable = ApiService.getApiService().getAllCats("small", "DESC", 0, 20)
+        mDisposable = ApiService.getApiService().getAllCats("small", "DESC", 0, 50)
                 .doOnSubscribe(disposable -> mIsLoading.postValue(true))
                 .doFinally(() -> mIsLoading.postValue(false))
                 .doOnSuccess(response -> mIsErrorVisible.postValue(false))
