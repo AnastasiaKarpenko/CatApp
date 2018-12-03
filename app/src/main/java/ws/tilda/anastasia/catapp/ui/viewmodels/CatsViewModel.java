@@ -2,6 +2,7 @@ package ws.tilda.anastasia.catapp.ui.viewmodels;
 
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class CatsViewModel {
     private ObservableBoolean mIsErrorVisible = new ObservableBoolean(false);
     private ObservableBoolean mIsLoading = new ObservableBoolean(false);
     private ObservableArrayList<MainCat> mCats = new ObservableArrayList<>();
-
+    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = () -> loadAllCats();
 
     public CatsViewModel(Repository repository, CatsAdapter.OnItemClickListener onItemClickListener) {
         mRepository = repository;
