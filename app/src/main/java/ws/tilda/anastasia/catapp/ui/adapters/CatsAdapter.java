@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ws.tilda.anastasia.catapp.data.model.MainCat;
@@ -16,11 +15,12 @@ public class CatsAdapter extends RecyclerView.Adapter<CatsAdapter.AllCatsViewHol
 
 
     @NonNull
-    private final List<MainCat> mCats = new ArrayList<>();
+    private final List<MainCat> mCats;
     private final OnItemClickListener mOnItemClickListener;
 
-    public CatsAdapter(OnItemClickListener onItemClickListener) {
+    public CatsAdapter(List<MainCat> cats, OnItemClickListener onItemClickListener) {
         mOnItemClickListener = onItemClickListener;
+        mCats = cats;
     }
 
     @NonNull
@@ -44,14 +44,14 @@ public class CatsAdapter extends RecyclerView.Adapter<CatsAdapter.AllCatsViewHol
     }
 
 
-    public void addData(List<MainCat> data, boolean isRefreshed) {
-        if (isRefreshed) {
-            mCats.clear();
-        }
-
-        mCats.addAll(data);
-        notifyDataSetChanged();
-    }
+//    public void addData(List<MainCat> data, boolean isRefreshed) {
+//        if (isRefreshed) {
+//            mCats.clear();
+//        }
+//
+//        mCats.addAll(data);
+//        notifyDataSetChanged();
+//    }
 
     public interface OnItemClickListener {
         void onItemClick(String catId);
