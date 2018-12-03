@@ -6,38 +6,26 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import ws.tilda.anastasia.catapp.R;
-import ws.tilda.anastasia.catapp.data.api.ApiService;
-import ws.tilda.anastasia.catapp.data.model.Cat;
-import ws.tilda.anastasia.catapp.data.model.MainCat;
 import ws.tilda.anastasia.catapp.data.repository.Repository;
 import ws.tilda.anastasia.catapp.ui.adapters.CatsAdapter;
 import ws.tilda.anastasia.catapp.ui.cat.CatActivity;
 import ws.tilda.anastasia.catapp.ui.cat.CatFragment;
+import ws.tilda.anastasia.catapp.ui.viewmodels.CatsViewModel;
 
-public class AllCatsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
+public class AllCatsFragment extends Fragment implements
         CatsAdapter.OnItemClickListener {
 
-    private RecyclerView mRecyclerView;
-    private CatsAdapter mCatsAdapter;
-    private View mErrorView;
-    private Repository mRepository;
-    private Disposable mDisposable;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+//    private RecyclerView mRecyclerView;
+//    private CatsAdapter mCatsAdapter;
+//    private View mErrorView;
+//    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    CatsViewModel mCatsViewModel;
 
     public AllCatsFragment() {
         // Required empty public constructor
@@ -52,7 +40,8 @@ public class AllCatsFragment extends Fragment implements SwipeRefreshLayout.OnRe
         super.onAttach(context);
 
         if (context instanceof Repository.RepositoryOwner) {
-            mRepository = ((Repository.RepositoryOwner) context).obtainRepository();
+            Repository repository = ((Repository.RepositoryOwner) context).obtainRepository();
+            mCatsViewModel = new CatsViewModel(repository);
         }
     }
 
@@ -64,73 +53,40 @@ public class AllCatsFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        mSwipeRefreshLayout = view.findViewById(R.id.refresher);
-        mRecyclerView = view.findViewById(R.id.cats_recyclerview);
-        mErrorView = view.findViewById(R.id.errorView);
-        mErrorView.setVisibility(View.GONE);
+//        mSwipeRefreshLayout = view.findViewById(R.id.refresher);
+//        mRecyclerView = view.findViewById(R.id.cats_recyclerview);
+//        mErrorView = view.findViewById(R.id.errorView);
+//        mErrorView.setVisibility(View.GONE);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-
-        mCatsAdapter = new CatsAdapter(this);
+//        mSwipeRefreshLayout.setOnRefreshListener(this);
+//
+//        mCatsAdapter = new CatsAdapter(this);
         int SPAN_COUNT = 2;
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
-        mRecyclerView.setAdapter(mCatsAdapter);
+//        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
+//        mRecyclerView.setAdapter(mCatsAdapter);
 
-        onRefresh();
+//        onRefresh();
     }
 
     @Override
     public void onDetach() {
-        mRepository = null;
-        if (mDisposable != null) {
-            mDisposable.dispose();
-        }
+//        mRepository = null;
+//        if (mDisposable != null) {
+//            mDisposable.dispose();
+//        }
         super.onDetach();
     }
 
-    @Override
-    public void onRefresh() {
-        getAllCats();
-    }
+//    @Override
+//    public void onRefresh() {
+//        getAllCats();
+//    }
 
-    private void getAllCats() {
-        mDisposable = ApiService.getApiService().getAllCats("small", "DESC", 0, 10)
-                .doOnSuccess(response -> mRepository.insertCats(getMainCats(response)))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> mSwipeRefreshLayout.setRefreshing(true))
-                .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
-                .subscribe(
-                        response -> {
-                            mErrorView.setVisibility(View.GONE);
-                            mRecyclerView.setVisibility(View.VISIBLE);
-
-//                            mAllCatsAdapter.addData(response, true);
-                            mCatsAdapter.addData(getMainCats(response), true);
-
-                        },
-                        throwable -> {
-                            mErrorView.setVisibility(View.VISIBLE);
-                            mRecyclerView.setVisibility(View.GONE);
-                            Log.d("ERROR", throwable.getMessage());
-                        });
-    }
-
-    private List<MainCat> getMainCats(List<Cat> cats) {
-        List<MainCat> mainCats = new ArrayList<>();
-        for (Cat cat : cats) {
-            MainCat mainCat = new MainCat();
-            mainCat.setCatId(cat.getId());
-            mainCat.setPhotoUrl(cat.getUrl());
-            mainCats.add(mainCat);
-        }
-        return mainCats;
-    }
 
     @Override
     public void onItemClick(String catId) {
