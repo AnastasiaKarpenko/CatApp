@@ -1,5 +1,6 @@
 package ws.tilda.anastasia.catapp.data.database;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
@@ -18,5 +19,8 @@ public interface CatDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCats(List<MainCat> cats);
+
+    @Query("select * from maincat")
+    LiveData<List<MainCat>> getAllCatsLive();
 
 }
