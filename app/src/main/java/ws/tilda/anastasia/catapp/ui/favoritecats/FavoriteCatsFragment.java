@@ -71,12 +71,12 @@ public class FavoriteCatsFragment extends Fragment implements SwipeRefreshLayout
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        mCatsAdapter = new CatsAdapter(this);
-        int SPAN_COUNT = 2;
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
-        mRecyclerView.setAdapter(mCatsAdapter);
-        onRefresh();
+//        mSwipeRefreshLayout.setOnRefreshListener(this);
+//        mCatsAdapter = new CatsAdapter(this);
+//        int SPAN_COUNT = 2;
+//        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
+//        mRecyclerView.setAdapter(mCatsAdapter);
+//        onRefresh();
     }
 
     @Override
@@ -104,7 +104,7 @@ public class FavoriteCatsFragment extends Fragment implements SwipeRefreshLayout
                             mEmptyView.setVisibility(View.GONE);
                             mRecyclerView.setVisibility(View.VISIBLE);
                             if (response != null && !response.isEmpty()) {
-                                mCatsAdapter.addData(getMainCats(response), true);
+//                                mCatsAdapter.addData(getMainCats(response), true);
                             } else {
                                 mEmptyView.setVisibility(View.VISIBLE);
                             }

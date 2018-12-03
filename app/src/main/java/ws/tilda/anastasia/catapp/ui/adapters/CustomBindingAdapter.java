@@ -21,7 +21,7 @@ public class CustomBindingAdapter {
                 .into(imageView);
     }
 
-    @BindingAdapter({"data", "clickHandler"})
+    @BindingAdapter({"bind:data", "bind:clickHandler"})
     public static void configureRecyclerView(RecyclerView recyclerView,
                                              List<MainCat> cats,
                                              CatsAdapter.OnItemClickListener onItemClickListener) {
@@ -30,7 +30,7 @@ public class CustomBindingAdapter {
 
     }
 
-    @BindingAdapter({"refreshState", "onRefresh"})
+    @BindingAdapter({"bind:refreshState", "bind:onRefresh"})
     public static void configureSwipeRefreshLayout(SwipeRefreshLayout layout, boolean isLoading,
                                                    SwipeRefreshLayout.OnRefreshListener listener) {
 
