@@ -38,7 +38,10 @@ public class CatsViewModel {
     public void loadAllCats() {
         mDisposable = ApiService.getApiService().getAllCats("small", "DESC", 0, 20)
                 .doOnSuccess(response -> mRepository.insertCats(catsToMainCats(response)))
-                .doOnError(throwable -> mCats.addAll(mRepository.getAllCats()))
+                .doOnError(throwable -> {
+                    mCats.clear();
+                    mCats.addAll(mRepository.getAllCats());
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> mIsLoading.set(true))
@@ -46,6 +49,7 @@ public class CatsViewModel {
                 .subscribe(
                         response -> {
                             mIsErrorVisible.set(false);
+                            mCats.clear();
                             mCats.addAll(catsToMainCats(response));
 
                         },
@@ -65,6 +69,7 @@ public class CatsViewModel {
                         response -> {
                             mIsErrorVisible.set(false);
                             if (response != null && !response.isEmpty()) {
+                                mCats.clear();
                                 mCats.addAll(favoriteCatsToMainCats(response));
                             } else {
                                 mIsFavCatsEmpty.set(true);

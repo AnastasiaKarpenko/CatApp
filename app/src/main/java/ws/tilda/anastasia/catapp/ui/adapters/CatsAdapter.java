@@ -43,16 +43,6 @@ public class CatsAdapter extends RecyclerView.Adapter<CatsAdapter.AllCatsViewHol
         return mCats.size();
     }
 
-
-//    public void addData(List<MainCat> data, boolean isRefreshed) {
-//        if (isRefreshed) {
-//            mCats.clear();
-//        }
-//
-//        mCats.addAll(data);
-//        notifyDataSetChanged();
-//    }
-
     public interface OnItemClickListener {
         void onItemClick(String catId);
     }
