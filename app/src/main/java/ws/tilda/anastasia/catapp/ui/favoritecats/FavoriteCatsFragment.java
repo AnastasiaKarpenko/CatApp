@@ -10,13 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ws.tilda.anastasia.catapp.data.repository.Repository;
-import ws.tilda.anastasia.catapp.databinding.CatsBinding;
+import ws.tilda.anastasia.catapp.databinding.FavoriteCatsBinding;
 import ws.tilda.anastasia.catapp.ui.adapters.CatsAdapter;
 import ws.tilda.anastasia.catapp.ui.allcats.AllCatsFragment;
 import ws.tilda.anastasia.catapp.ui.cat.CatActivity;
 import ws.tilda.anastasia.catapp.ui.cat.CatFragment;
-import ws.tilda.anastasia.catapp.ui.viewmodels.CatsViewModel;
-import ws.tilda.anastasia.catapp.ui.viewmodels.CustomFactory;
+import ws.tilda.anastasia.catapp.ui.viewmodels.CustomFactory2;
+import ws.tilda.anastasia.catapp.ui.viewmodels.FavoriteCatsViewModel;
 
 public class FavoriteCatsFragment extends AllCatsFragment {
 
@@ -26,7 +26,7 @@ public class FavoriteCatsFragment extends AllCatsFragment {
     }
 
 
-    private CatsViewModel mCatsViewModel;
+    private FavoriteCatsViewModel mFavoriteCatsViewModel;
     private CatsAdapter.OnItemClickListener mOnItemClickListener =
             catId -> {
                 Intent intent = new Intent(getActivity(), CatActivity.class);
@@ -43,19 +43,17 @@ public class FavoriteCatsFragment extends AllCatsFragment {
 
         if (context instanceof Repository.RepositoryOwner) {
             Repository repository = ((Repository.RepositoryOwner) context).obtainRepository();
-            CustomFactory customFactory = new CustomFactory(repository, mOnItemClickListener);
-            mCatsViewModel = ViewModelProviders.of(this, customFactory).get(CatsViewModel.class);
+            CustomFactory2 customFactory = new CustomFactory2(repository, mOnItemClickListener);
+            mFavoriteCatsViewModel = ViewModelProviders.of(this, customFactory).get(FavoriteCatsViewModel.class);
         }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        CatsBinding binding = CatsBinding.inflate(inflater, container, false);
-        binding.setVm(mCatsViewModel);
+        FavoriteCatsBinding binding = FavoriteCatsBinding.inflate(inflater, container, false);
+        binding.setVm(mFavoriteCatsViewModel);
         binding.setLifecycleOwner(this);
-        mCatsViewModel.loadFavoriteCats();
-
         return binding.getRoot();
     }
 

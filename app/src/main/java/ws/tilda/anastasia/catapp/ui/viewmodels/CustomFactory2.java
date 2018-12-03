@@ -7,11 +7,11 @@ import android.support.annotation.NonNull;
 import ws.tilda.anastasia.catapp.data.repository.Repository;
 import ws.tilda.anastasia.catapp.ui.adapters.CatsAdapter;
 
-public class CustomFactory extends ViewModelProvider.NewInstanceFactory {
+public class CustomFactory2 extends ViewModelProvider.NewInstanceFactory {
     private Repository mRepository;
     private CatsAdapter.OnItemClickListener mOnItemClickListener;
 
-    public CustomFactory(Repository repository, CatsAdapter.OnItemClickListener onItemClickListener) {
+    public CustomFactory2(Repository repository, CatsAdapter.OnItemClickListener onItemClickListener) {
         mRepository = repository;
         mOnItemClickListener = onItemClickListener;
     }
@@ -19,6 +19,6 @@ public class CustomFactory extends ViewModelProvider.NewInstanceFactory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new AllCatsViewModel(mRepository, mOnItemClickListener);
+        return (T) new FavoriteCatsViewModel(mRepository, mOnItemClickListener);
     }
 }

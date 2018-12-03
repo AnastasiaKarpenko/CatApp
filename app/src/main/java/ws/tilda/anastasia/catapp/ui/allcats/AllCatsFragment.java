@@ -15,12 +15,12 @@ import ws.tilda.anastasia.catapp.databinding.CatsBinding;
 import ws.tilda.anastasia.catapp.ui.adapters.CatsAdapter;
 import ws.tilda.anastasia.catapp.ui.cat.CatActivity;
 import ws.tilda.anastasia.catapp.ui.cat.CatFragment;
-import ws.tilda.anastasia.catapp.ui.viewmodels.CatsViewModel;
+import ws.tilda.anastasia.catapp.ui.viewmodels.AllCatsViewModel;
 import ws.tilda.anastasia.catapp.ui.viewmodels.CustomFactory;
 
 public class AllCatsFragment extends Fragment {
 
-    private CatsViewModel mCatsViewModel;
+    private AllCatsViewModel mAllCatsViewModel;
     private CatsAdapter.OnItemClickListener mOnItemClickListener =
             catId -> {
                 Intent intent = new Intent(getActivity(), CatActivity.class);
@@ -42,7 +42,7 @@ public class AllCatsFragment extends Fragment {
             Repository repository = ((Repository.RepositoryOwner) context).obtainRepository();
 
             CustomFactory customFactory = new CustomFactory(repository, mOnItemClickListener);
-            mCatsViewModel = ViewModelProviders.of(this, customFactory).get(CatsViewModel.class);
+            mAllCatsViewModel = ViewModelProviders.of(this, customFactory).get(AllCatsViewModel.class);
         }
     }
 
@@ -50,10 +50,8 @@ public class AllCatsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         CatsBinding binding = CatsBinding.inflate(inflater, container, false);
-        binding.setVm(mCatsViewModel);
+        binding.setVm(mAllCatsViewModel);
         binding.setLifecycleOwner(this);
-        mCatsViewModel.loadAllCats();
-
         return binding.getRoot();
     }
 

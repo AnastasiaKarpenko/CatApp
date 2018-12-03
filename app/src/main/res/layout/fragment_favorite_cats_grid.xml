@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:bind="http://schemas.android.com/apk/res-auto">
 
-    <data class="CatsBinding">
+    <data class="FavoriteCatsBinding">
 
         <import
             alias="V"
@@ -10,7 +10,7 @@
 
         <variable
             name="vm"
-            type="ws.tilda.anastasia.catapp.ui.viewmodels.AllCatsViewModel"/>
+            type="ws.tilda.anastasia.catapp.ui.viewmodels.FavoriteCatsViewModel"/>
 
     </data>
 
@@ -38,6 +38,10 @@
             <include
                 layout="@layout/view_error"
                 android:visibility="@{vm.isErrorVisible ? V.VISIBLE : V.GONE}"/>
+
+            <include
+                layout="@layout/view_empty"
+                android:visibility="@{vm.isFavCatsEmpty ? V.VISIBLE : V.GONE}"/>
 
         </LinearLayout>
 
