@@ -40,7 +40,7 @@ public class CatsAdapter extends RecyclerView.Adapter<CatsAdapter.AllCatsViewHol
 
     @Override
     public int getItemCount() {
-        return mCats.size();
+        return mCats == null ? 0 : mCats.size();
     }
 
     public interface OnItemClickListener {

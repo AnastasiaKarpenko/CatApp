@@ -1,5 +1,6 @@
 package ws.tilda.anastasia.catapp.ui.viewmodels;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -24,37 +25,29 @@ public class AllCatsViewModel extends ViewModel {
 
     private MutableLiveData<Boolean> mIsErrorVisible = new MutableLiveData<>();
     private MutableLiveData<Boolean> mIsLoading = new MutableLiveData<>();
-    private MutableLiveData<List<MainCat>> mCats = new MutableLiveData<>();
+    private LiveData<List<MainCat>> mCats;
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = () -> {
-        loadAllCats();
+        updateAllCats();
     };
 
     public AllCatsViewModel(Repository repository, CatsAdapter.OnItemClickListener onItemClickListener) {
         mRepository = repository;
         mOnItemClickListener = onItemClickListener;
-        mCats.setValue(new ArrayList<>());
-        loadAllCats();
+        mCats = mRepository.getAllCatsLive();
+        updateAllCats();
     }
 
-
-    public void loadAllCats() {
+    private void updateAllCats() {
         mDisposable = ApiService.getApiService().getAllCats("small", "DESC", 0, 20)
-                .doOnSuccess(response -> mRepository.insertCats(catsToMainCats(response)))
-                .doOnError(throwable -> {
-                    mCats.postValue(mRepository.getAllCats());
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> mIsLoading.postValue(true))
                 .doFinally(() -> mIsLoading.postValue(false))
+                .doOnSuccess(response -> mIsErrorVisible.postValue(false))
+                .subscribeOn(Schedulers.io())
                 .subscribe(
-                        response -> {
-                            mIsErrorVisible.postValue(false);
-                            mCats.postValue(catsToMainCats(response));
-
-                        },
+                        response -> mRepository.insertCats(catsToMainCats(response)),
                         throwable -> {
-                            mIsErrorVisible.postValue(false);
+                            mIsErrorVisible.postValue(mCats.getValue().size() == 0 ||
+                                    mCats.getValue() == null);
                             Log.d("loadAllCats() ERROR: ", throwable.getMessage());
                         });
     }
@@ -94,7 +87,7 @@ public class AllCatsViewModel extends ViewModel {
         return mIsLoading;
     }
 
-    public MutableLiveData<List<MainCat>> getCats() {
+    public LiveData<List<MainCat>> getCats() {
         return mCats;
     }
 }
