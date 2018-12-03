@@ -1,30 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                              android:id="@+id/refresher"
-                                              android:layout_width="match_parent"
-                                              android:layout_height="match_parent">
+    <data class="CatsBinding">
 
-    <FrameLayout
+        <variable
+            name="vm"
+            type="ws.tilda.anastasia.catapp.ui.viewmodels.CatsViewModel"/>
+
+    </data>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresher"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/cats_recyclerview"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </android.support.v7.widget.RecyclerView>
 
-        <include
-            layout="@layout/view_error"
-            android:visibility="gone"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/cats_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </android.support.v7.widget.RecyclerView>
 
-        <include
-            layout="@layout/view_empty"
-            android:visibility="gone"/>
+            <include
+                layout="@layout/view_error"
+                android:visibility="gone"/>
 
-    </FrameLayout>
+            <include
+                layout="@layout/view_empty"
+                android:visibility="gone"/>
 
-</android.support.v4.widget.SwipeRefreshLayout>
+        </FrameLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</layout>
+
+
+
 
 
