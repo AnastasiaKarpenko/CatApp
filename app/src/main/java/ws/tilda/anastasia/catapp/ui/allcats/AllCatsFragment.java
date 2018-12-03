@@ -19,27 +19,15 @@ import ws.tilda.anastasia.catapp.ui.viewmodels.CatsViewModel;
 
 public class AllCatsFragment extends Fragment {
 
-//    private RecyclerView mRecyclerView;
-//    private CatsAdapter mCatsAdapter;
-//    private View mErrorView;
-//    private SwipeRefreshLayout mSwipeRefreshLayout;
-
     private CatsViewModel mCatsViewModel;
     private CatsAdapter.OnItemClickListener mOnItemClickListener =
-            new CatsAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(String catId) {
-                    Intent intent = new Intent(getActivity(), CatActivity.class);
-                    Bundle args = new Bundle();
-                    args.putString(CatFragment.CAT_ID_KEY, catId);
-                    intent.putExtra(CatActivity.CAT_ID_KEY, args);
-                    startActivity(intent);
-                }
+            catId -> {
+                Intent intent = new Intent(getActivity(), CatActivity.class);
+                Bundle args = new Bundle();
+                args.putString(CatFragment.CAT_ID_KEY, catId);
+                intent.putExtra(CatActivity.CAT_ID_KEY, args);
+                startActivity(intent);
             };
-
-    public AllCatsFragment() {
-        // Required empty public constructor
-    }
 
     public static AllCatsFragment newInstance() {
         return new AllCatsFragment();
@@ -62,25 +50,10 @@ public class AllCatsFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        mSwipeRefreshLayout = view.findViewById(R.id.refresher);
-//        mRecyclerView = view.findViewById(R.id.cats_recyclerview);
-//        mErrorView = view.findViewById(R.id.errorView);
-//        mErrorView.setVisibility(View.GONE);
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-//        mSwipeRefreshLayout.setOnRefreshListener(this);
-//
-//        mCatsAdapter = new CatsAdapter(this);
-        int SPAN_COUNT = 2;
-//        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
-//        mRecyclerView.setAdapter(mCatsAdapter);
-
-//        onRefresh();
+        mCatsViewModel.loadAllCats();
     }
 
     @Override
@@ -88,11 +61,5 @@ public class AllCatsFragment extends Fragment {
         mCatsViewModel.dispatchDetach();
         super.onDetach();
     }
-
-//    @Override
-//    public void onRefresh() {
-//        getAllCats();
-//    }
-
 
 }

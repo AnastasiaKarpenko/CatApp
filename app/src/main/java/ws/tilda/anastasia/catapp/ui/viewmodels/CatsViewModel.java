@@ -32,7 +32,7 @@ public class CatsViewModel {
     }
 
 
-    private void getAllCats() {
+    public void loadAllCats() {
         mDisposable = ApiService.getApiService().getAllCats("small", "DESC", 0, 10)
                 .doOnSuccess(response -> mRepository.insertCats(getMainCats(response)))
                 .subscribeOn(Schedulers.io())
@@ -47,7 +47,7 @@ public class CatsViewModel {
                         },
                         throwable -> {
                             mIsErrorVisible.set(false);
-                            Log.d("getAllCats() ERROR: ", throwable.getMessage());
+                            Log.d("loadAllCats() ERROR: ", throwable.getMessage());
                         });
     }
 
@@ -67,5 +67,21 @@ public class CatsViewModel {
         if (mDisposable != null) {
             mDisposable.dispose();
         }
+    }
+
+    public CatsAdapter.OnItemClickListener getOnItemClickListener() {
+        return mOnItemClickListener;
+    }
+
+    public ObservableBoolean getIsErrorVisible() {
+        return mIsErrorVisible;
+    }
+
+    public ObservableBoolean getIsLoading() {
+        return mIsLoading;
+    }
+
+    public ObservableArrayList<MainCat> getCats() {
+        return mCats;
     }
 }
