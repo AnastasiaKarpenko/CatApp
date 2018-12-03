@@ -1,7 +1,7 @@
 package ws.tilda.anastasia.catapp.ui.viewmodels;
 
-import android.databinding.ObservableArrayList;
-import android.databinding.ObservableBoolean;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 
@@ -18,20 +18,21 @@ import ws.tilda.anastasia.catapp.data.model.MainCat;
 import ws.tilda.anastasia.catapp.data.repository.Repository;
 import ws.tilda.anastasia.catapp.ui.adapters.CatsAdapter;
 
-public class CatsViewModel {
+public class CatsViewModel extends ViewModel {
     private Disposable mDisposable;
     private Repository mRepository;
     private CatsAdapter.OnItemClickListener mOnItemClickListener;
 
-    private ObservableBoolean mIsFavCatsEmpty = new ObservableBoolean(false);
-    private ObservableBoolean mIsErrorVisible = new ObservableBoolean(false);
-    private ObservableBoolean mIsLoading = new ObservableBoolean(false);
-    private ObservableArrayList<MainCat> mCats = new ObservableArrayList<>();
+    private MutableLiveData<Boolean> mIsFavCatsEmpty = new MutableLiveData<>();
+    private MutableLiveData<Boolean> mIsErrorVisible = new MutableLiveData<>();
+    private MutableLiveData<Boolean> mIsLoading = new MutableLiveData<>();
+    private MutableLiveData<List<MainCat>> mCats = new MutableLiveData<>();
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = () -> loadAllCats();
 
     public CatsViewModel(Repository repository, CatsAdapter.OnItemClickListener onItemClickListener) {
         mRepository = repository;
         mOnItemClickListener = onItemClickListener;
+        mCats.setValue(new ArrayList<>());
     }
 
 
@@ -39,22 +40,22 @@ public class CatsViewModel {
         mDisposable = ApiService.getApiService().getAllCats("small", "DESC", 0, 20)
                 .doOnSuccess(response -> mRepository.insertCats(catsToMainCats(response)))
                 .doOnError(throwable -> {
-                    mCats.clear();
-                    mCats.addAll(mRepository.getAllCats());
+                    //mCats.clear();
+                    mCats.postValue(mRepository.getAllCats());
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> mIsLoading.set(true))
-                .doFinally(() -> mIsLoading.set(false))
+                .doOnSubscribe(disposable -> mIsLoading.postValue(true))
+                .doFinally(() -> mIsLoading.postValue(false))
                 .subscribe(
                         response -> {
-                            mIsErrorVisible.set(false);
-                            mCats.clear();
-                            mCats.addAll(catsToMainCats(response));
+                            mIsErrorVisible.postValue(false);
+                            //mCats.clear();
+                            mCats.postValue(catsToMainCats(response));
 
                         },
                         throwable -> {
-                            mIsErrorVisible.set(false);
+                            mIsErrorVisible.postValue(false);
                             Log.d("loadAllCats() ERROR: ", throwable.getMessage());
                         });
     }
@@ -63,20 +64,20 @@ public class CatsViewModel {
         mDisposable = ApiService.getApiService().getFavoriteCats()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> mIsLoading.set(true))
-                .doFinally(() -> mIsLoading.set(false))
+                .doOnSubscribe(disposable -> mIsLoading.postValue(true))
+                .doFinally(() -> mIsLoading.postValue(false))
                 .subscribe(
                         response -> {
-                            mIsErrorVisible.set(false);
+                            mIsErrorVisible.postValue(false);
                             if (response != null && !response.isEmpty()) {
-                                mCats.clear();
-                                mCats.addAll(favoriteCatsToMainCats(response));
+                                //mCats.clear();
+                                mCats.postValue(favoriteCatsToMainCats(response));
                             } else {
-                                mIsFavCatsEmpty.set(true);
+                                mIsFavCatsEmpty.postValue(true);
                             }
                         },
                         throwable -> {
-                            mIsErrorVisible.set(false);
+                            mIsErrorVisible.postValue(false);
                             Log.d("loadFavoriteCats():ERR ", throwable.getMessage());
                         });
 
@@ -105,7 +106,8 @@ public class CatsViewModel {
         return mainCats;
     }
 
-    public void dispatchDetach() {
+    @Override
+    public void onCleared() {
         mRepository = null;
         if (mDisposable != null) {
             mDisposable.dispose();
@@ -116,23 +118,23 @@ public class CatsViewModel {
         return mOnItemClickListener;
     }
 
-    public ObservableBoolean getIsErrorVisible() {
-        return mIsErrorVisible;
-    }
-
-    public ObservableBoolean getIsLoading() {
-        return mIsLoading;
-    }
-
-    public ObservableArrayList<MainCat> getCats() {
-        return mCats;
-    }
-
     public SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
         return mOnRefreshListener;
     }
 
-    public ObservableBoolean getIsFavCatsEmpty() {
+    public MutableLiveData<Boolean> getIsFavCatsEmpty() {
         return mIsFavCatsEmpty;
+    }
+
+    public MutableLiveData<Boolean> getIsErrorVisible() {
+        return mIsErrorVisible;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return mIsLoading;
+    }
+
+    public MutableLiveData<List<MainCat>> getCats() {
+        return mCats;
     }
 }

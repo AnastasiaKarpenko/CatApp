@@ -57,11 +57,4 @@ public class AllCatsFragment extends Fragment {
 
         mCatsViewModel.loadAllCats();
     }
-
-    @Override
-    public void onDetach() {
-        mCatsViewModel.dispatchDetach();
-        super.onDetach();
-    }
-
 }
