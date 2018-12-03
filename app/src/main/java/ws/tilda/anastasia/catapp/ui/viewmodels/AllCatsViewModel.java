@@ -34,7 +34,6 @@ public class AllCatsViewModel extends ViewModel {
         mRepository = repository;
         mOnItemClickListener = onItemClickListener;
         mCats = mRepository.getAllCatsLive();
-        updateAllCats();
     }
 
     private void updateAllCats() {
