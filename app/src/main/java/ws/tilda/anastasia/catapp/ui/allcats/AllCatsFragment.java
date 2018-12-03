@@ -85,10 +85,7 @@ public class AllCatsFragment extends Fragment {
 
     @Override
     public void onDetach() {
-//        mRepository = null;
-//        if (mDisposable != null) {
-//            mDisposable.dispose();
-//        }
+        mCatsViewModel.dispatchDetach();
         super.onDetach();
     }
 

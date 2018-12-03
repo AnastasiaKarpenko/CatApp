@@ -61,4 +61,11 @@ public class CatsViewModel {
         }
         return mainCats;
     }
+
+    public void dispatchDetach() {
+        mRepository = null;
+        if (mDisposable != null) {
+            mDisposable.dispose();
+        }
+    }
 }
