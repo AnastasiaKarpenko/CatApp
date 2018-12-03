@@ -19,11 +19,12 @@ public class CustomBindingAdapter {
                 .centerCrop()
                 .into(imageView);
     }
-
+    @BindingAdapter({"data", "clickHandler"})
     public static void configureRecyclerView(RecyclerView recyclerView,
                                              List<MainCat> cats,
                                              CatsAdapter.OnItemClickListener onItemClickListener) {
         CatsAdapter catsAdapter = new CatsAdapter(cats, onItemClickListener);
+        recyclerView.setAdapter(catsAdapter);
 
     }
 }
