@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ws.tilda.anastasia.catapp.R;
 import ws.tilda.anastasia.catapp.data.repository.Repository;
+import ws.tilda.anastasia.catapp.databinding.CatsBinding;
 import ws.tilda.anastasia.catapp.ui.adapters.CatsAdapter;
 import ws.tilda.anastasia.catapp.ui.cat.CatActivity;
 import ws.tilda.anastasia.catapp.ui.cat.CatFragment;
@@ -46,7 +46,9 @@ public class AllCatsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_cats_grid, container, false);
+        CatsBinding binding = CatsBinding.inflate(inflater, container, false);
+        binding.setVm(mCatsViewModel);
+        return binding.getRoot();
     }
 
     @Override
