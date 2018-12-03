@@ -1,4 +1,4 @@
-package ws.tilda.anastasia.catapp.ui.allcats;
+package ws.tilda.anastasia.catapp.ui.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,17 +8,18 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import ws.tilda.anastasia.catapp.data.model.Cat;
+import ws.tilda.anastasia.catapp.data.model.MainCat;
 import ws.tilda.anastasia.catapp.databinding.CatBinding;
+import ws.tilda.anastasia.catapp.ui.viewmodels.CatListItemViewModel;
 
-public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsViewHolder> {
+public class CatsAdapter extends RecyclerView.Adapter<CatsAdapter.AllCatsViewHolder> {
 
 
     @NonNull
-    private final List<Cat> mCats = new ArrayList<>();
+    private final List<MainCat> mCats = new ArrayList<>();
     private final OnItemClickListener mOnItemClickListener;
 
-    public AllCatsAdapter(OnItemClickListener onItemClickListener) {
+    public CatsAdapter(OnItemClickListener onItemClickListener) {
         mOnItemClickListener = onItemClickListener;
     }
 
@@ -33,7 +34,7 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
 
     @Override
     public void onBindViewHolder(@NonNull AllCatsViewHolder allCatsViewHolder, int i) {
-        Cat cat = mCats.get(i);
+        MainCat cat = mCats.get(i);
         allCatsViewHolder.bind(cat, mOnItemClickListener);
     }
 
@@ -43,7 +44,7 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
     }
 
 
-    void addData(List<Cat> data, boolean isRefreshed) {
+    public void addData(List<MainCat> data, boolean isRefreshed) {
         if (isRefreshed) {
             mCats.clear();
         }
@@ -57,7 +58,7 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
     }
 
 
-    class AllCatsViewHolder extends RecyclerView.ViewHolder {
+    public class AllCatsViewHolder extends RecyclerView.ViewHolder {
         private CatBinding mCatBinding;
 
         AllCatsViewHolder(@NonNull CatBinding binding) {
@@ -65,11 +66,13 @@ public class AllCatsAdapter extends RecyclerView.Adapter<AllCatsAdapter.AllCatsV
             mCatBinding = binding;
         }
 
-        void bind(Cat cat, OnItemClickListener listener) {
+        void bind(MainCat cat, OnItemClickListener listener) {
 
             mCatBinding.setCat(new CatListItemViewModel(cat));
             mCatBinding.setOnItemClickListener(mOnItemClickListener);
             mCatBinding.executePendingBindings();
         }
+
+
     }
 }

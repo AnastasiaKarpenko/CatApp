@@ -5,10 +5,10 @@
 
         <variable
             name="cat"
-            type="ws.tilda.anastasia.catapp.ui.allcats.CatListItemViewModel"/>
+            type="ws.tilda.anastasia.catapp.ui.viewmodels.CatListItemViewModel"/>
         <variable
             name="onItemClickListener"
-            type="ws.tilda.anastasia.catapp.ui.allcats.AllCatsAdapter.OnItemClickListener"/>
+            type="ws.tilda.anastasia.catapp.ui.adapters.CatsAdapter.OnItemClickListener"/>
 
     </data>
 

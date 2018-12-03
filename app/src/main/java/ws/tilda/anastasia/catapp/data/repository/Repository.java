@@ -4,6 +4,7 @@ import java.util.List;
 
 import ws.tilda.anastasia.catapp.data.database.CatDao;
 import ws.tilda.anastasia.catapp.data.model.Cat;
+import ws.tilda.anastasia.catapp.data.model.MainCat;
 
 public class Repository {
     private CatDao mCatDao;
@@ -12,12 +13,12 @@ public class Repository {
         mCatDao = catDao;
     }
 
-    public List<Cat> getAllCats() {
-        List<Cat> cats = mCatDao.getAllCats();
+    public List<MainCat> getAllCats() {
+        List<MainCat> cats = mCatDao.getAllCats();
         return cats;
     }
 
-    public void insertCats(List<Cat> cats) {
+    public void insertCats(List<MainCat> cats) {
         mCatDao.insertCats(cats);
 
     }

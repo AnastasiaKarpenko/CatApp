@@ -8,24 +8,31 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ws.tilda.anastasia.catapp.R;
 import ws.tilda.anastasia.catapp.data.api.ApiService;
+import ws.tilda.anastasia.catapp.data.model.Cat;
+import ws.tilda.anastasia.catapp.data.model.MainCat;
 import ws.tilda.anastasia.catapp.data.repository.Repository;
 import ws.tilda.anastasia.catapp.ui.RefreshOwner;
 import ws.tilda.anastasia.catapp.ui.Refreshable;
+import ws.tilda.anastasia.catapp.ui.adapters.CatsAdapter;
 import ws.tilda.anastasia.catapp.ui.cat.CatActivity;
 import ws.tilda.anastasia.catapp.ui.cat.CatFragment;
 
-public class AllCatsFragment extends Fragment implements Refreshable, AllCatsAdapter.OnItemClickListener {
+public class AllCatsFragment extends Fragment implements Refreshable, CatsAdapter.OnItemClickListener {
     private RecyclerView mRecyclerView;
-    private AllCatsAdapter mAllCatsAdapter;
+    private CatsAdapter mCatsAdapter;
     private RefreshOwner mRefreshOwner;
     private View mErrorView;
     private Repository mRepository;
@@ -69,10 +76,10 @@ public class AllCatsFragment extends Fragment implements Refreshable, AllCatsAda
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mAllCatsAdapter = new AllCatsAdapter(this);
+        mCatsAdapter = new CatsAdapter(this);
         int SPAN_COUNT = 2;
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
-        mRecyclerView.setAdapter(mAllCatsAdapter);
+        mRecyclerView.setAdapter(mCatsAdapter);
 
         onRefreshData();
     }
@@ -100,9 +107,7 @@ public class AllCatsFragment extends Fragment implements Refreshable, AllCatsAda
 
     private void getAllCats() {
         mDisposable = ApiService.getApiService().getAllCats("small", "DESC", 0, 10)
-                .doOnSuccess(response -> mRepository.insertCats(response))
-                .onErrorReturn(throwable ->
-                        ApiService.NETWORK_EXCEPTIONS.contains(throwable.getClass()) ? mRepository.getAllCats() : null)
+                .doOnSuccess(response -> mRepository.insertCats(getMainCats(response)))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> mRefreshOwner.setRefreshState(true))
@@ -111,12 +116,27 @@ public class AllCatsFragment extends Fragment implements Refreshable, AllCatsAda
                         response -> {
                             mErrorView.setVisibility(View.GONE);
                             mRecyclerView.setVisibility(View.VISIBLE);
-                            mAllCatsAdapter.addData(response, true);
+
+//                            mAllCatsAdapter.addData(response, true);
+                            mCatsAdapter.addData(getMainCats(response), true);
+
                         },
                         throwable -> {
                             mErrorView.setVisibility(View.VISIBLE);
                             mRecyclerView.setVisibility(View.GONE);
+                            Log.d("ERROR",throwable.getMessage() );
                         });
+    }
+
+    private List<MainCat> getMainCats(List<Cat> cats) {
+        List<MainCat> mainCats = new ArrayList<>();
+        for (Cat cat : cats) {
+            MainCat mainCat = new MainCat();
+            mainCat.setCatId(cat.getId());
+            mainCat.setPhotoUrl(cat.getUrl());
+            mainCats.add(mainCat);
+        }
+        return mainCats;
     }
 
     @Override

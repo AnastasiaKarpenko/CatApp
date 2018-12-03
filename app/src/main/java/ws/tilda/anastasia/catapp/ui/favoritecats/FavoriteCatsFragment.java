@@ -12,19 +12,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ws.tilda.anastasia.catapp.R;
 import ws.tilda.anastasia.catapp.data.api.ApiService;
+import ws.tilda.anastasia.catapp.data.model.FavoriteCat;
+import ws.tilda.anastasia.catapp.data.model.MainCat;
 import ws.tilda.anastasia.catapp.ui.RefreshOwner;
 import ws.tilda.anastasia.catapp.ui.Refreshable;
+import ws.tilda.anastasia.catapp.ui.adapters.CatsAdapter;
 import ws.tilda.anastasia.catapp.ui.cat.CatActivity;
 import ws.tilda.anastasia.catapp.ui.cat.CatFragment;
 
-public class FavoriteCatsFragment extends Fragment implements Refreshable, FavoriteCatsAdapter.OnItemClickListener {
+public class FavoriteCatsFragment extends Fragment implements Refreshable, CatsAdapter.OnItemClickListener {
     private RecyclerView mRecyclerView;
-    private FavoriteCatsAdapter mFavoriteCatsAdapter;
+    private CatsAdapter mCatsAdapter;
     private RefreshOwner mRefreshOwner;
     private View mErrorView;
     private View mEmptyView;
@@ -67,10 +73,10 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, Favor
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mFavoriteCatsAdapter = new FavoriteCatsAdapter(this);
+        mCatsAdapter = new CatsAdapter(this);
         int SPAN_COUNT = 2;
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
-        mRecyclerView.setAdapter(mFavoriteCatsAdapter);
+        mRecyclerView.setAdapter(mCatsAdapter);
         onRefreshData();
     }
 
@@ -106,7 +112,7 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, Favor
                             mEmptyView.setVisibility(View.GONE);
                             mRecyclerView.setVisibility(View.VISIBLE);
                             if (response != null && !response.isEmpty()) {
-                                mFavoriteCatsAdapter.addData(response, true);
+                                mCatsAdapter.addData(getMainCats(response), true);
                             } else {
                                 mEmptyView.setVisibility(View.VISIBLE);
                             }
@@ -116,6 +122,18 @@ public class FavoriteCatsFragment extends Fragment implements Refreshable, Favor
                             mRecyclerView.setVisibility(View.GONE);
                         });
 
+    }
+
+    private List<MainCat> getMainCats(List<FavoriteCat> cats) {
+        List<MainCat> mainCats = new ArrayList<>();
+        for (FavoriteCat cat : cats) {
+            MainCat mainCat = new MainCat();
+            mainCat.setCatId(cat.getImageId());
+            mainCat.setPhotoUrl(cat.getImage().getUrl());
+            mainCat.setFavoriteId(cat.getId());
+            mainCats.add(mainCat);
+        }
+        return mainCats;
     }
 
     @Override
