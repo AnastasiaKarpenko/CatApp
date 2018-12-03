@@ -1,6 +1,7 @@
 package ws.tilda.anastasia.catapp.data.database;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.paging.DataSource;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
@@ -22,5 +23,8 @@ public interface CatDao {
 
     @Query("select * from maincat")
     LiveData<List<MainCat>> getAllCatsLive();
+
+    @Query("select * from maincat")
+    DataSource.Factory<Integer, MainCat> getAllCatsPaged();
 
 }
