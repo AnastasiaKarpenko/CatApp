@@ -38,6 +38,7 @@ public class CatsViewModel {
     public void loadAllCats() {
         mDisposable = ApiService.getApiService().getAllCats("small", "DESC", 0, 20)
                 .doOnSuccess(response -> mRepository.insertCats(catsToMainCats(response)))
+                .doOnError(throwable -> mCats.addAll(mRepository.getAllCats()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> mIsLoading.set(true))
