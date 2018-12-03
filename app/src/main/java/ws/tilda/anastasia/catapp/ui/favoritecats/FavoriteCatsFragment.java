@@ -61,11 +61,4 @@ public class FavoriteCatsFragment extends AllCatsFragment {
         mCatsViewModel.loadFavoriteCats();
     }
 
-    @Override
-    public void onDetach() {
-        mCatsViewModel.dispatchDetach();
-        super.onDetach();
-    }
-
-
 }
